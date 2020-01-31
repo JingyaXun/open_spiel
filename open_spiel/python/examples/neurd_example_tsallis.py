@@ -25,8 +25,8 @@ from __future__ import print_function
 from absl import app
 from absl import flags
 import tensorflow.compat.v1 as tf
-
-from open_spiel.python.algorithms import neurd
+import tensorflow 
+from open_spiel.python.algorithms import neurd_tsallis as neurd
 
 import pyspiel
 
@@ -35,9 +35,9 @@ tf.enable_eager_execution()
 FLAGS = flags.FLAGS
 
 flags.DEFINE_integer("iterations", 1000, "Number of iterations")
-flags.DEFINE_string("game", "kuhn_poker", "Name of the game")
+flags.DEFINE_string("game", "leduc_poker", "Name of the game")
 flags.DEFINE_integer("players", 2, "Number of players")
-flags.DEFINE_integer("print_freq", 100, "How often to print the exploitability")
+flags.DEFINE_integer("print_freq", 5, "How often to print the exploitability")
 flags.DEFINE_integer("num_hidden_layers", 1,
                      "The number of hidden layers in the policy model.")
 flags.DEFINE_integer("num_hidden_units", 13,
@@ -63,6 +63,7 @@ flags.DEFINE_boolean(
 
 
 def main(_):
+  tensorflow.random.set_random_seed(1223)
   game = pyspiel.load_game(FLAGS.game,
                            {"players": pyspiel.GameParameter(FLAGS.players)})
 

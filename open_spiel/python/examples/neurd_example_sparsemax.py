@@ -26,7 +26,7 @@ from absl import app
 from absl import flags
 import tensorflow.compat.v1 as tf
 
-from open_spiel.python.algorithms import neurd
+from open_spiel.python.algorithms import neurd_sparsemax as neurd
 
 import pyspiel
 

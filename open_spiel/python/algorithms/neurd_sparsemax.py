@@ -236,6 +236,7 @@ class CounterfactualNeurdSolver(object):
       # print(tf.shape(tensor))
       stacked_tensor = tf_contrib.sparsemax.sparsemax(stacked_tensor)
       tensor = stacked_tensor[0]
+      print(tensor)
       # print(tf.reduce_sum(tensor, keepdims=True))
 
       return tensor.numpy() if self._session is None else self._session(tensor)

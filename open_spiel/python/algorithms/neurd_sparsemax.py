@@ -31,6 +31,7 @@ from __future__ import print_function
 
 import numpy as np
 import tensorflow.compat.v1 as tf
+import tensorflow.contrib as tf_contrib
 
 from open_spiel.python.algorithms import rcfr
 
@@ -219,10 +220,24 @@ class CounterfactualNeurdSolver(object):
     else:
       tensor = tf.squeeze(self._models[player](
           self._root_wrapper.sequence_features[player]))
-      tensor = tensor - tf.reduce_max(tensor, keepdims=True)
-      tensor = tf.math.exp(tensor)
+
+      stacked_tensor = tf.stack([tensor, tensor])
+      # print(stacked_tensor)
+
+      # print(tensor)
+      # print(tf.shape(tensor))
+      # print("@@@@@@@@@@@@@@@@@@@@@@")
+      # tensor = tf.expand_dims(tensor,1)
+      # print(tensor)
+      # print(tf.shape(tensor))
+
+      # tensor = tf.reshape(tensor, [12,])
+      # print(tensor)
+      # print(tf.shape(tensor))
+      stacked_tensor = tf_contrib.sparsemax.sparsemax(stacked_tensor)
+      tensor = stacked_tensor[0]
       # print(tf.reduce_sum(tensor, keepdims=True))
-      # tensor = tf.nn.softmax(tensor)
+
       return tensor.numpy() if self._session is None else self._session(tensor)
 
   def current_policy(self):
@@ -243,7 +258,7 @@ class CounterfactualNeurdSolver(object):
 
     Returns:
       A `dict<info state, list<Action, probability>>` that maps info state
-      strings to (Action, probability) pairs describing each player's policy.
+      strings to (Actions, probability) pairs describing each player's policy.
     """
     return self._root_wrapper.sequence_weights_to_tabular_profile(
         self._cumulative_seq_probs)

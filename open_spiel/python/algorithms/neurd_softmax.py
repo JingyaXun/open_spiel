@@ -219,10 +219,12 @@ class CounterfactualNeurdSolver(object):
     else:
       tensor = tf.squeeze(self._models[player](
           self._root_wrapper.sequence_features[player]))
-      tensor = tensor - tf.reduce_max(tensor, keepdims=True)
-      tensor = tf.math.exp(tensor)
+    #   tensor = tensor - tf.reduce_max(tensor, keepdims=True)
+    #   tensor = tf.math.exp(tensor)
+
+      tensor = tf.nn.softmax(tensor)
       # print(tf.reduce_sum(tensor, keepdims=True))
-      # tensor = tf.nn.softmax(tensor)
+
       return tensor.numpy() if self._session is None else self._session(tensor)
 
   def current_policy(self):

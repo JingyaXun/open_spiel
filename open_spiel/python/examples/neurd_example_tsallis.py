@@ -37,8 +37,9 @@ FLAGS = flags.FLAGS
 flags.DEFINE_integer("iterations", 10000, "Number of iterations")
 flags.DEFINE_string("game", "kuhn_poker", "Name of the game")
 flags.DEFINE_float("alpha", 1.0, "Alpha for Tsallis")
+flags.DEFINE_float("random_seed", 1, "random seed")
 flags.DEFINE_integer("players", 2, "Number of players")
-flags.DEFINE_integer("print_freq", 5, "How often to print the exploitability")
+flags.DEFINE_integer("print_freq", 1, "How often to print the exploitability")
 flags.DEFINE_integer("num_hidden_layers", 1,
                      "The number of hidden layers in the policy model.")
 flags.DEFINE_integer("num_hidden_units", 13,
@@ -64,7 +65,7 @@ flags.DEFINE_boolean(
 
 
 def main(_):
-  tensorflow.random.set_random_seed(1223)
+  tensorflow.random.set_random_seed(int(FLAGS.random_seed))
   game = pyspiel.load_game(FLAGS.game,
                            {"players": pyspiel.GameParameter(FLAGS.players)})
 
@@ -81,7 +82,7 @@ def main(_):
             use_skip_connections=FLAGS.use_skip_connections,
             autoencode=FLAGS.autoencode))
 
-  solver = neurd.CounterfactualNeurdSolver(game, models)
+  solver = neurd.CounterfactualNeurdSolver(game, FLAGS.alpha, models)
 
   def _train(model, data):
     neurd.train(

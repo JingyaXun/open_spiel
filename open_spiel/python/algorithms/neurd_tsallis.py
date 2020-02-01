@@ -189,7 +189,7 @@ class CounterfactualNeurdSolver(object):
   two-player, zero-sum games.
   """
 
-  def __init__(self, game, models, session=None):
+  def __init__(self, game, alpha, models, session=None):
     """Creates a new `CounterfactualNeurdSolver`.
 
     Args:
@@ -201,6 +201,7 @@ class CounterfactualNeurdSolver(object):
         assumed that eager mode is enabled. Defaults to `None`.
     """
     self._game = game
+    self._alpha = alpha
     self._models = models
     self._root_wrapper = rcfr.RootStateWrapper(game.new_initial_state())
     self._session = session
@@ -231,7 +232,7 @@ class CounterfactualNeurdSolver(object):
 
       length = tf.shape(tensor)[0]
       stacked_tensor = tf.reshape(tensor,[1,length])
-      tsallis = TsallisLoss(alpha=1.08)
+      tsallis = TsallisLoss(alpha=self._alpha)
       tensor = tsallis.predict(stacked_tensor.numpy())[0] 
 
       # print("+"*50)

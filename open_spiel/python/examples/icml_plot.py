@@ -6,7 +6,7 @@ experiments = 40
 
 data = np.zeros((experiments,1000))
 
-with open("kuhn_poker_tsallis_1.05.txt") as f:
+with open("leduc_poker_tsallis_1.03.txt") as f:
     l = eval(f.readline())
 
     for i in range(experiments):
@@ -24,6 +24,6 @@ plt.xlabel("Iteration")
 plt.ylabel("Exploitability")
 plt.xscale("log")
 plt.yscale("log")
-plt.title("kuhn_Poker  tsallis  alpha=1.05")
+plt.title("leduc_Poker  tsallis  alpha=1.03")
 
-plt.savefig("plots/kuhn_poker_tsallis_1.05.png")
+plt.savefig("plots/leduc_poker_tsallis_1.03.png")

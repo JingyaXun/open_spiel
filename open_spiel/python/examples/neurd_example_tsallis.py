@@ -34,8 +34,9 @@ tf.enable_eager_execution()
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_integer("iterations", 1000, "Number of iterations")
-flags.DEFINE_string("game", "leduc_poker", "Name of the game")
+flags.DEFINE_integer("iterations", 10000, "Number of iterations")
+flags.DEFINE_string("game", "kuhn_poker", "Name of the game")
+flags.DEFINE_float("alpha", 1.0, "Alpha for Tsallis")
 flags.DEFINE_integer("players", 2, "Number of players")
 flags.DEFINE_integer("print_freq", 5, "How often to print the exploitability")
 flags.DEFINE_integer("num_hidden_layers", 1,
@@ -66,6 +67,8 @@ def main(_):
   tensorflow.random.set_random_seed(1223)
   game = pyspiel.load_game(FLAGS.game,
                            {"players": pyspiel.GameParameter(FLAGS.players)})
+
+  # game = pyspiel.load_game(FLAGS.game)
 
   models = []
   for _ in range(game.num_players()):

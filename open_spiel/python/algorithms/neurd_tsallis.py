@@ -231,9 +231,8 @@ class CounterfactualNeurdSolver(object):
 
       length = tf.shape(tensor)[0]
       stacked_tensor = tf.reshape(tensor,[1,length])
-      tsallis = TsallisLoss(alpha=1.05)
+      tsallis = TsallisLoss(alpha=1.08)
       tensor = tsallis.predict(stacked_tensor.numpy())[0] 
-      tensor += 1e-8
 
       # print("+"*50)
       # print(tensor)

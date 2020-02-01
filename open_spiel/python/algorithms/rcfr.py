@@ -278,6 +278,7 @@ class RootStateWrapper(object):
         for any player.
     """
     num_players = len(sequence_weights)
+
     regrets = np.zeros(self.num_player_sequences[regret_player])
     reach_weights = np.zeros(self.num_player_sequences[reach_weight_player])
 

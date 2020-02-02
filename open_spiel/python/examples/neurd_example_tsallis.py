@@ -37,6 +37,8 @@ FLAGS = flags.FLAGS
 flags.DEFINE_integer("iterations", 10000, "Number of iterations")
 flags.DEFINE_string("game", "kuhn_poker", "Name of the game")
 flags.DEFINE_float("alpha", 1.0, "Alpha for Tsallis")
+flags.DEFINE_boolean("adaptive_alpha", False, "Whether use adaptive alpha")
+flags.DEFINE_float("alpha0", 1.0, "Initial alpha")
 flags.DEFINE_float("random_seed", 1, "random seed")
 flags.DEFINE_integer("players", 2, "Number of players")
 flags.DEFINE_integer("print_freq", 1, "How often to print the exploitability")
@@ -95,7 +97,11 @@ def main(_):
                           if FLAGS.autoencode else None))
 
   for i in range(FLAGS.iterations):
-    solver.evaluate_and_update_policy(_train)
+        # send i into the function to notify the adaptation of alpha
+    if FLAGS.adaptive_alpha:
+      solver.evaluate_and_update_policy(_train, i, FLAGS.alpha0)
+    else:
+      solver.evaluate_and_update_policy(_train, alpha0=FLAGS.alpha0)
     if i % FLAGS.print_freq == 0:
       conv = pyspiel.exploitability(game, solver.average_policy())
       print("Iteration {} exploitability {}".format(i, conv))

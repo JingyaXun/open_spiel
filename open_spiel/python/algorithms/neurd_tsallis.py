@@ -210,11 +210,11 @@ class CounterfactualNeurdSolver(object):
         np.zeros(n) for n in self._root_wrapper.num_player_sequences
     ]
 
-  def _sequence_weights(self, player=None):
+  def _sequence_weights(self, player=None, current_iteration=None, alpha0=1):
     """Returns exponentiated weights for each sequence as an `np.array`."""
     if player is None:
       return [
-          self._sequence_weights(player)
+          self._sequence_weights(player, current_iteration)
           for player in range(self._game.num_players())
       ]
     else:
@@ -232,7 +232,18 @@ class CounterfactualNeurdSolver(object):
 
       length = tf.shape(tensor)[0]
       stacked_tensor = tf.reshape(tensor,[1,length])
-      tsallis = TsallisLoss(alpha=self._alpha)
+    #   tsallis = TsallisLoss(alpha=self._alpha)
+      if current_iteration:
+        gamma = 0.95
+        t = current_iteration / 100
+        if current_iteration % 100 == 0:
+            adaptive_alpha = alpha0 * (gamma ** t)
+            adaptive_alpha = max(adaptive_alpha, 1)
+        else:
+            adaptive_alpha = alpha0
+      else:
+        adaptive_alpha = alpha0
+      tsallis = TsallisLoss(alpha=adaptive_alpha)
       tensor = tsallis.predict(stacked_tensor.numpy())[0] 
 
       # print("+"*50)
@@ -281,7 +292,7 @@ class CounterfactualNeurdSolver(object):
     """The player for whom the average policy should be updated."""
     return self._previous_player(regret_player)
 
-  def evaluate_and_update_policy(self, train_fn):
+  def evaluate_and_update_policy(self, train_fn, current_iteration=None, alpha0=1):
     """Performs a single step of policy evaluation and policy improvement.
 
     Args:
@@ -289,7 +300,7 @@ class CounterfactualNeurdSolver(object):
         regression model to accurately reproduce the x to y mapping given x-y
         data.
     """
-    sequence_weights = self._sequence_weights()
+    sequence_weights = self._sequence_weights(current_iteration=current_iteration, alpha0=alpha0)
     player_seq_features = self._root_wrapper.sequence_features
     for regret_player in range(self._game.num_players()):
       seq_prob_player = self._average_policy_update_player(regret_player)
@@ -306,7 +317,7 @@ class CounterfactualNeurdSolver(object):
 
       regret_player_model = self._models[regret_player]
       train_fn(regret_player_model, data)
-      sequence_weights[regret_player] = self._sequence_weights(regret_player)
+      sequence_weights[regret_player] = self._sequence_weights(regret_player, current_iteration=current_iteration, alpha0=alpha0)
 
 
 # Author: Mathieu Blondel

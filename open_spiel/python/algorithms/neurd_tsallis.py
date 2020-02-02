@@ -44,12 +44,13 @@ def thresholded(logits, regrets, threshold=2.0):
   return can_decrease * regrets_negative + can_increase * regrets_positive
 
 
-@tf.function
+# @tf.function
 def train(model,
           data,
           batch_size,
           step_size=1.0,
           threshold=2.0,
+          alpha=1.0,
           random_shuffle_size=None,
           autoencoder_loss=None):
   """Train NeuRD `model` on `data`."""
@@ -73,6 +74,7 @@ def train(model,
         utility = utility - autoencoder_loss(x, output[:, 1:])
 
     grad = tape.gradient(utility, model.trainable_variables)
+    # print(regrets)
 
     for i, var in enumerate(model.trainable_variables):
       var.assign_add(step_size * grad[i])
@@ -210,7 +212,7 @@ class CounterfactualNeurdSolver(object):
         np.zeros(n) for n in self._root_wrapper.num_player_sequences
     ]
 
-  def _sequence_weights(self, player=None, current_iteration=None, alpha0=1):
+  def _sequence_weights(self, player=None, current_iteration=None, alpha=1):
     """Returns exponentiated weights for each sequence as an `np.array`."""
     if player is None:
       return [
@@ -237,12 +239,12 @@ class CounterfactualNeurdSolver(object):
         gamma = 0.95
         t = current_iteration / 100
         if current_iteration % 100 == 0:
-            adaptive_alpha = alpha0 * (gamma ** t)
+            adaptive_alpha = alpha * (gamma ** t)
             adaptive_alpha = max(adaptive_alpha, 1)
         else:
-            adaptive_alpha = alpha0
+            adaptive_alpha = alpha
       else:
-        adaptive_alpha = alpha0
+        adaptive_alpha = alpha
       tsallis = TsallisLoss(alpha=adaptive_alpha)
       tensor = tsallis.predict(stacked_tensor.numpy())[0] 
 
@@ -292,7 +294,7 @@ class CounterfactualNeurdSolver(object):
     """The player for whom the average policy should be updated."""
     return self._previous_player(regret_player)
 
-  def evaluate_and_update_policy(self, train_fn, current_iteration=None, alpha0=1):
+  def evaluate_and_update_policy(self, train_fn, current_iteration=None, alpha=1):
     """Performs a single step of policy evaluation and policy improvement.
 
     Args:
@@ -300,14 +302,14 @@ class CounterfactualNeurdSolver(object):
         regression model to accurately reproduce the x to y mapping given x-y
         data.
     """
-    sequence_weights = self._sequence_weights(current_iteration=current_iteration, alpha0=alpha0)
+    sequence_weights = self._sequence_weights(current_iteration=current_iteration, alpha=alpha)
     player_seq_features = self._root_wrapper.sequence_features
     for regret_player in range(self._game.num_players()):
       seq_prob_player = self._average_policy_update_player(regret_player)
 
       regrets, seq_probs = (
           self._root_wrapper.counterfactual_regrets_and_reach_weights(
-              regret_player, seq_prob_player, *sequence_weights))
+              regret_player, seq_prob_player, alpha, *sequence_weights))
 
       self._cumulative_seq_probs[seq_prob_player] += seq_probs
 
@@ -317,7 +319,7 @@ class CounterfactualNeurdSolver(object):
 
       regret_player_model = self._models[regret_player]
       train_fn(regret_player_model, data)
-      sequence_weights[regret_player] = self._sequence_weights(regret_player, current_iteration=current_iteration, alpha0=alpha0)
+      sequence_weights[regret_player] = self._sequence_weights(regret_player, current_iteration=current_iteration, alpha=alpha)
 
 
 # Author: Mathieu Blondel

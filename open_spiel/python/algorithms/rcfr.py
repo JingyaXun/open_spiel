@@ -257,7 +257,7 @@ class RootStateWrapper(object):
         self.root, self.sequence_weights_to_policy_fn(player_sequence_weights))
 
   def counterfactual_regrets_and_reach_weights(self, regret_player,
-                                               reach_weight_player,
+                                               reach_weight_player, alpha=1.0,
                                                *sequence_weights):
     """Returns counterfactual regrets and reach weights as a tuple.
 
@@ -282,7 +282,7 @@ class RootStateWrapper(object):
     regrets = np.zeros(self.num_player_sequences[regret_player])
     reach_weights = np.zeros(self.num_player_sequences[reach_weight_player])
 
-    def _walk_descendants(state, reach_probabilities, chance_reach_probability):
+    def _walk_descendants(state, reach_probabilities, chance_reach_probability, alpha):
       """Compute `state`'s counterfactual regrets and reach weights.
 
       Args:
@@ -313,7 +313,7 @@ class RootStateWrapper(object):
         for action, action_prob in state.chance_outcomes():
           v += _walk_descendants(
               state.child(action), reach_probabilities,
-              chance_reach_probability * action_prob)
+              chance_reach_probability * action_prob, alpha)
         return v
 
       player = state.current_player()
@@ -343,6 +343,8 @@ class RootStateWrapper(object):
       is_regret_player_node = player == regret_player
 
       reach_prob = reach_probabilities[player]
+
+      param = 0
       for action_idx, action in enumerate(actions):
         action_prob = policy[action_idx]
         next_reach_prob = reach_prob * action_prob
@@ -357,14 +359,20 @@ class RootStateWrapper(object):
         reach_probabilities[player] = next_reach_prob
 
         action_value = _walk_descendants(
-            state.child(action), reach_probabilities, chance_reach_probability)
+            state.child(action), reach_probabilities, chance_reach_probability, alpha)
 
+        # if is_regret_player_node:
+        #   state_value = state_value + action_prob * action_value
         if is_regret_player_node:
-          state_value = state_value + action_prob * action_value
+          state_value = state_value + tf.pow(action_prob,2-alpha) * action_value 
+          param += tf.pow(action_prob,2-alpha)
         else:
           state_value = state_value + action_value
         action_values[action_idx] = action_value
 
+      if is_regret_player_node:
+        state_value *= 1.0/param
+      
       reach_probabilities[player] = reach_prob
 
       if is_regret_player_node:
@@ -374,7 +382,7 @@ class RootStateWrapper(object):
 
     # End of _walk_descendants
 
-    _walk_descendants(self.root, np.ones(num_players), 1.0)
+    _walk_descendants(self.root, np.ones(num_players), 1.0, alpha=alpha)
     return regrets, reach_weights
 
 

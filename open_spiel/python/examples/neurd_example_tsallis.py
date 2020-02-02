@@ -36,7 +36,7 @@ FLAGS = flags.FLAGS
 
 flags.DEFINE_integer("iterations", 10000, "Number of iterations")
 flags.DEFINE_string("game", "kuhn_poker", "Name of the game")
-flags.DEFINE_float("alpha", 1.0, "Alpha for Tsallis")
+flags.DEFINE_float("alpha", 1.3, "Alpha for Tsallis")
 flags.DEFINE_boolean("adaptive_alpha", False, "Whether use adaptive alpha")
 flags.DEFINE_float("alpha0", 1.0, "Initial alpha")
 flags.DEFINE_float("random_seed", 1, "random seed")
@@ -92,6 +92,7 @@ def main(_):
         data,
         batch_size=FLAGS.batch_size,
         step_size=FLAGS.step_size,
+        alpha=FLAGS.alpha,
         threshold=FLAGS.threshold,
         autoencoder_loss=(tf.compat.v1.losses.huber_loss
                           if FLAGS.autoencode else None))
@@ -99,9 +100,9 @@ def main(_):
   for i in range(FLAGS.iterations):
         # send i into the function to notify the adaptation of alpha
     if FLAGS.adaptive_alpha:
-      solver.evaluate_and_update_policy(_train, i, FLAGS.alpha0)
+      solver.evaluate_and_update_policy(_train, i, FLAGS.alpha)
     else:
-      solver.evaluate_and_update_policy(_train, alpha0=FLAGS.alpha0)
+      solver.evaluate_and_update_policy(_train, alpha=FLAGS.alpha)
     if i % FLAGS.print_freq == 0:
       conv = pyspiel.exploitability(game, solver.average_policy())
       print("Iteration {} exploitability {}".format(i, conv))

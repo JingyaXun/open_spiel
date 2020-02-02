@@ -85,6 +85,7 @@ def game_payoffs_array(game):
     First dimension is the player, followed by the actions of all players, e.g.
     a 3x3 game (2 players) has dimension [2,3,3].
   """
+  np.random.seed(30)
   if isinstance(game, pyspiel.MatrixGame):
     return np.stack([game.row_utilities(), game.col_utilities()])
 

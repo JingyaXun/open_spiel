@@ -29,22 +29,24 @@ import tensorflow
 from open_spiel.python.algorithms import neurd_tsallis as neurd
 
 import pyspiel
-
+import time
 tf.enable_eager_execution()
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_integer("iterations", 10000, "Number of iterations")
+flags.DEFINE_integer("iterations", 1000, "Number of iterations")
 flags.DEFINE_string("game", "kuhn_poker", "Name of the game")
-flags.DEFINE_float("alpha", 1.3, "Alpha for Tsallis")
+flags.DEFINE_float("alpha", 2, "Alpha for Tsallis")
 flags.DEFINE_boolean("adaptive_alpha", False, "Whether use adaptive alpha")
-flags.DEFINE_float("alpha0", 1.0, "Initial alpha")
+flags.DEFINE_boolean("increase", True, "Whether increase alpha or not")
+flags.DEFINE_float("adaptive_policy", 1, "1 for linear, 2 for exp")
+flags.DEFINE_float("gamma", 0.99, "param for exp adaptive policy")
 flags.DEFINE_float("random_seed", 1, "random seed")
 flags.DEFINE_integer("players", 2, "Number of players")
-flags.DEFINE_integer("print_freq", 1, "How often to print the exploitability")
+flags.DEFINE_integer("print_freq", 100 , "How often to print the exploitability")
 flags.DEFINE_integer("num_hidden_layers", 1,
                      "The number of hidden layers in the policy model.")
-flags.DEFINE_integer("num_hidden_units", 13,
+flags.DEFINE_integer("num_hidden_units", 512,
                      "The number of hidden layers in the policy model.")
 flags.DEFINE_integer(
     "num_hidden_factors", 8,
@@ -97,15 +99,20 @@ def main(_):
         autoencoder_loss=(tf.compat.v1.losses.huber_loss
                           if FLAGS.autoencode else None))
 
+  start_time = time.time()
   for i in range(FLAGS.iterations):
         # send i into the function to notify the adaptation of alpha
+    
     if FLAGS.adaptive_alpha:
-      solver.evaluate_and_update_policy(_train, i, FLAGS.alpha)
+      solver.evaluate_and_update_policy(_train, current_iteration=i, alpha=FLAGS.alpha, increase=FLAGS.increase, gamma=FLAGS.gamma, adaptive_policy=FLAGS.adaptive_policy, total_iteration=FLAGS.iterations)
     else:
       solver.evaluate_and_update_policy(_train, alpha=FLAGS.alpha)
     if i % FLAGS.print_freq == 0:
       conv = pyspiel.exploitability(game, solver.average_policy())
       print("Iteration {} exploitability {}".format(i, conv))
+    
+  end_time = time.time()
+  print(end_time - start_time)
 
 
 if __name__ == "__main__":

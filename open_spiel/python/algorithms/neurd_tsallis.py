@@ -29,6 +29,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import math
+
 import numpy as np
 import tensorflow.compat.v1 as tf
 
@@ -212,11 +214,11 @@ class CounterfactualNeurdSolver(object):
         np.zeros(n) for n in self._root_wrapper.num_player_sequences
     ]
 
-  def _sequence_weights(self, player=None, current_iteration=None, alpha=1):
+  def _sequence_weights(self, alpha=None, increase=None, gamma=None, adaptive_policy=None, total_iteration=None, player=None, current_iteration=None):
     """Returns exponentiated weights for each sequence as an `np.array`."""
     if player is None:
       return [
-          self._sequence_weights(player, current_iteration)
+          self._sequence_weights(alpha=alpha, increase=increase, gamma=gamma, adaptive_policy=adaptive_policy, total_iteration=total_iteration,  player=player, current_iteration=current_iteration)
           for player in range(self._game.num_players())
       ]
     else:
@@ -235,33 +237,55 @@ class CounterfactualNeurdSolver(object):
       length = tf.shape(tensor)[0]
       stacked_tensor = tf.reshape(tensor,[1,length])
     #   tsallis = TsallisLoss(alpha=self._alpha)
+
       if current_iteration:
-        gamma = 0.95
-        t = current_iteration / 100
-        if current_iteration % 100 == 0:
-            adaptive_alpha = alpha * (gamma ** t)
-            adaptive_alpha = max(adaptive_alpha, 1)
+        if adaptive_policy == 1:
+          adaptive_alpha = self._linear_update(large_alpha=alpha, current_iteration=current_iteration, total_iteration=total_iteration, increase=increase)
+        elif adaptive_policy == 2:
+          adaptive_alpha = self._exp_update(large_alpha=alpha, current_iteration=current_iteration, total_iteration=total_iteration, increase=increase, gamma=gamma)
         else:
-            adaptive_alpha = alpha
+          print("ERROR: Policy should be either linear or exp")
+
       else:
         adaptive_alpha = alpha
+
+      print(adaptive_alpha)
+
       tsallis = TsallisLoss(alpha=adaptive_alpha)
       tensor = tsallis.predict(stacked_tensor.numpy())[0] 
 
-      # print("+"*50)
-      # print(tensor)
-
-
-   
-
-      # print(tensor)
-      # print(tf.reduce_sum(tensor, keepdims=True))
-      # print(tensor)
-
-      # tensor = tf.nn.softmax(tensor)
-
-      # return tensor.numpy() if self._session is None else self._session(tensor)
       return tensor if self._session is None else self._session(tensor)
+
+  def _linear_update(self, large_alpha, current_iteration, total_iteration, increase):
+    if increase:
+      alpha = (float(current_iteration) / total_iteration) * (large_alpha-1) + 1.0
+    else:
+      alpha = large_alpha - (float(current_iteration) / total_iteration) * (large_alpha-1)
+    
+    return alpha
+  
+
+  def _exp_update(self, large_alpha, current_iteration, total_iteration, gamma, increase):
+    # print("large_alpha: ", large_alpha)
+    # print("current_iteration: ", current_iteration)
+    # print("total_iteration: ", total_iteration)
+    # print("gamma", gamma)
+
+    num_change = math.log(1.0/(large_alpha))/math.log(gamma)
+    frequent = max(int(total_iteration/num_change), 1)
+    times = int(current_iteration/frequent)
+    # print("times: ", times)
+
+    if increase:
+      alpha = 1 * ((1.0/gamma)**times)
+    else:
+      alpha = large_alpha * (gamma**times)
+
+    
+    return alpha
+
+
+
 
   def current_policy(self):
     """Returns the current policy profile.
@@ -294,7 +318,7 @@ class CounterfactualNeurdSolver(object):
     """The player for whom the average policy should be updated."""
     return self._previous_player(regret_player)
 
-  def evaluate_and_update_policy(self, train_fn, current_iteration=None, alpha=1):
+  def evaluate_and_update_policy(self, train_fn, alpha, increase, gamma, adaptive_policy, total_iteration, current_iteration=None):
     """Performs a single step of policy evaluation and policy improvement.
 
     Args:
@@ -302,7 +326,7 @@ class CounterfactualNeurdSolver(object):
         regression model to accurately reproduce the x to y mapping given x-y
         data.
     """
-    sequence_weights = self._sequence_weights(current_iteration=current_iteration, alpha=alpha)
+    sequence_weights = self._sequence_weights(current_iteration=current_iteration, alpha=alpha, increase=increase, gamma=gamma, adaptive_policy=adaptive_policy, total_iteration=total_iteration)
     player_seq_features = self._root_wrapper.sequence_features
     for regret_player in range(self._game.num_players()):
       seq_prob_player = self._average_policy_update_player(regret_player)
@@ -319,7 +343,7 @@ class CounterfactualNeurdSolver(object):
 
       regret_player_model = self._models[regret_player]
       train_fn(regret_player_model, data)
-      sequence_weights[regret_player] = self._sequence_weights(regret_player, current_iteration=current_iteration, alpha=alpha)
+      sequence_weights[regret_player] = self._sequence_weights(player=regret_player, current_iteration=current_iteration, alpha=alpha, increase=increase, gamma=gamma, adaptive_policy=adaptive_policy, total_iteration=total_iteration)
 
 
 # Author: Mathieu Blondel

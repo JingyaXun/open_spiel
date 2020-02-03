@@ -238,8 +238,12 @@ class CounterfactualNeurdSolver(object):
       stacked_tensor = tf.reshape(tensor,[1,length])
     #   tsallis = TsallisLoss(alpha=self._alpha)
 
+    
+
       if current_iteration:
-        if adaptive_policy == 1:
+        if alpha == 1:
+          adaptive_alpha = alpha
+        elif adaptive_policy == 1:
           adaptive_alpha = self._linear_update(large_alpha=alpha, current_iteration=current_iteration, total_iteration=total_iteration, increase=increase)
         elif adaptive_policy == 2:
           adaptive_alpha = self._exp_update(large_alpha=alpha, current_iteration=current_iteration, total_iteration=total_iteration, increase=increase, gamma=gamma)
@@ -249,7 +253,7 @@ class CounterfactualNeurdSolver(object):
       else:
         adaptive_alpha = alpha
 
-      print(adaptive_alpha)
+      # print(adaptive_alpha)
 
       tsallis = TsallisLoss(alpha=adaptive_alpha)
       tensor = tsallis.predict(stacked_tensor.numpy())[0] 
@@ -262,7 +266,7 @@ class CounterfactualNeurdSolver(object):
     else:
       alpha = large_alpha - (float(current_iteration) / total_iteration) * (large_alpha-1)
     
-    return alpha
+    return round(alpha, 2)
   
 
   def _exp_update(self, large_alpha, current_iteration, total_iteration, gamma, increase):
@@ -282,7 +286,7 @@ class CounterfactualNeurdSolver(object):
       alpha = large_alpha * (gamma**times)
 
     
-    return alpha
+    return round(alpha, 2)
 
 
 

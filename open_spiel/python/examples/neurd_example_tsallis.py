@@ -36,8 +36,8 @@ FLAGS = flags.FLAGS
 
 flags.DEFINE_integer("iterations", 1000, "Number of iterations")
 flags.DEFINE_string("game", "kuhn_poker", "Name of the game")
-flags.DEFINE_float("alpha", 2, "Alpha for Tsallis")
-flags.DEFINE_boolean("adaptive_alpha", False, "Whether use adaptive alpha")
+flags.DEFINE_float("alpha", 1.2, "Alpha for Tsallis")
+flags.DEFINE_boolean("adaptive_alpha", True, "Whether use adaptive alpha")
 flags.DEFINE_boolean("increase", True, "Whether increase alpha or not")
 flags.DEFINE_float("adaptive_policy", 1, "1 for linear, 2 for exp")
 flags.DEFINE_float("gamma", 0.99, "param for exp adaptive policy")

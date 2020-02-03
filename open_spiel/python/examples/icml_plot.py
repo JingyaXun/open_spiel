@@ -2,15 +2,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy import array
 import os
+import seaborn as sns
+import pandas as pd
+
+
+sns.set()
 
 
 def plot_single(data_path, file, experiments, iterations):
     # data preprocessing, take average
     data = np.zeros((experiments,iterations))
     with open(os.path.join(data_path, file)) as f:
-        l = eval(f.readline())
 
         for i in range(experiments):
+            l = eval(f.readline())
             data_float = np.array(l[:-1]).astype(np.float)
             data[i] = data_float
             i +=1
@@ -39,12 +44,11 @@ def plot_stacked(data_path, files, experiments, iterations):
         data = np.zeros((experiments,iterations))
 
         with open(os.path.join(data_path, file)) as f:
-            l = eval(f.readline())
-            # print(l)
 
             for i in range(experiments):
+                l = eval(f.readline())
                 # data_float = np.array(l[:-1]).astype(np.float)
-                data_float = np.array(l[:-1]).astype(np.float)
+                data_float = np.array(l[:iterations]).astype(np.float)
                 data[i] = data_float
                 
         data = np.average(data, axis=0)
@@ -67,12 +71,62 @@ def plot_stacked(data_path, files, experiments, iterations):
     
     plt.savefig(os.path.join(data_path, "plot/kuhn_poker_stacked_2.5w.png"))
 
+def plot_single_confidence(data_path, file, experiments, iterations):
+    # data preprocessing, take average
+    data = np.zeros((experiments,iterations))
+    with open(os.path.join(data_path, file)) as f:
+
+        for i in range(experiments):
+            l = eval(f.readline())
+            data_float = np.array(l[:iterations]).astype(np.float)
+            data[i] = data_float
+            i +=1
+    
+    # convert matrix to dataframe object
+    cur_itr = 1
+
+    df = pd.DataFrame(columns=["itr", "exploitability"])
+
+    for line in data:
+        cur_itr = 1
+        for exp in line:
+            df = df.append({"itr" : cur_itr, "exploitability" : exp}, ignore_index=True)
+            cur_itr += 1
+
+    # plot 
+    x_axis = array(range(iterations))+1
+
+    # plt.plot(x_axis, data)
+    # plt.xlabel("Iteration")
+    # plt.ylabel("Exploitability")
+    # plt.xscale("log")
+    # plt.yscale("log")
+    # plt.title("kuhn_Poker  tsallis  alpha=1.09")
+
+    p = sns.lineplot(x="itr", y="exploitability", data=df)
+
+    plt.savefig(os.path.join(data_path, "plot/kuhn_poker_ci_1.09.png"))
+
 
 if __name__ == '__main__':
     experiments = 10
-    iterations = 25000
+    iterations = 1000
 
     data_path = "ICML_Experiments_Dynamics/kuhn_dynamics_2.5w/"
+
+    file = "kuhn_poker_dynamics_alpha_2.5w_1.1.txt"
+
+    # files = ["kuhn_poker_dynamics_alpha_2.5w_1.txt",
+    #         "kuhn_poker_dynamics_alpha_2.5w_1.05.txt",
+    #         "kuhn_poker_dynamics_alpha_2.5w_1.1.txt",
+    #         "kuhn_poker_dynamics_alpha_2.5w_1.15.txt",
+    #         "kuhn_poker_dynamics_alpha_2.5w_1.2.txt",
+    #         "kuhn_poker_dynamics_alpha_2.5w_1.25.txt",
+    #         "kuhn_poker_dynamics_alpha_2.5w_1.3.txt",
+    #         "kuhn_poker_dynamics_alpha_2.5w_1.35.txt",
+    #         "kuhn_poker_dynamics_alpha_2.5w_1.4.txt",
+    #         "kuhn_poker_dynamics_alpha_2.5w_1.45.txt",
+    #         "kuhn_poker_dynamics_alpha_2.5w_1.5.txt"]
 
     files = ["kuhn_poker_dynamics_alpha_2.5w_1.txt",
             "kuhn_poker_dynamics_alpha_2.5w_1.05.txt",
@@ -80,16 +134,13 @@ if __name__ == '__main__':
             "kuhn_poker_dynamics_alpha_2.5w_1.15.txt",
             "kuhn_poker_dynamics_alpha_2.5w_1.2.txt",
             "kuhn_poker_dynamics_alpha_2.5w_1.25.txt",
-            "kuhn_poker_dynamics_alpha_2.5w_1.3.txt",
-            "kuhn_poker_dynamics_alpha_2.5w_1.35.txt",
-            "kuhn_poker_dynamics_alpha_2.5w_1.4.txt",
-            "kuhn_poker_dynamics_alpha_2.5w_1.45.txt",
-            "kuhn_poker_dynamics_alpha_2.5w_1.5.txt"]
+            "kuhn_poker_dynamics_alpha_2.5w_1.3.txt"]
 
     #plot_single(data_path, "kuhn_poker_tsallis_1.09.txt", experiments, iterations)
 
-    plot_stacked(data_path, files, experiments, iterations)
+    #plot_stacked(data_path, files, experiments, iterations)
 
+    plot_single_confidence(data_path, file, experiments, iterations)
     
 
    

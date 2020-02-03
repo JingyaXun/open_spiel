@@ -249,7 +249,7 @@ class CounterfactualNeurdSolver(object):
       else:
         adaptive_alpha = alpha
 
-      print(adaptive_alpha)
+      # print(adaptive_alpha)
 
       tsallis = TsallisLoss(alpha=adaptive_alpha)
       tensor = tsallis.predict(stacked_tensor.numpy())[0] 
@@ -262,7 +262,7 @@ class CounterfactualNeurdSolver(object):
     else:
       alpha = large_alpha - (float(current_iteration) / total_iteration) * (large_alpha-1)
     
-    return alpha
+    return round(alpha, 2)
   
 
   def _exp_update(self, large_alpha, current_iteration, total_iteration, gamma, increase):
@@ -282,7 +282,7 @@ class CounterfactualNeurdSolver(object):
       alpha = large_alpha * (gamma**times)
 
     
-    return alpha
+    return round(alpha, 2)
 
 
 

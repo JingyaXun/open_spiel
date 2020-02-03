@@ -10,8 +10,10 @@ def experiment(args, seed, q):
                 "--alpha="+str(args.alpha),
                 "--iterations="+str(args.iterations),
                 "--game="+str(args.game),
-                "--random_seed="+str(seed)], stdout=subprocess.PIPE)
-
+                "--random_seed="+str(seed),
+                "--adaptive_alpha="+str(args.adaptive_alpha),
+                "--adaptive_policy="+str(args.adaptive_policy),
+                "--increase="+str(args.increase)], stdout=subprocess.PIPE)
 
     data = []
     results = str(proc.stdout.read())
@@ -21,7 +23,6 @@ def experiment(args, seed, q):
 
     q.put(data)
     return data
-
 
 def hello(seed):
     print("hello " + str(seed))
@@ -46,6 +47,9 @@ def main():
     parser.add_argument('--iterations', type=int, help="Number of iterations")
     parser.add_argument('--game', type=str, help="Name of the game")
     parser.add_argument('--alpha', type=float, help="Alpha for Tsallis")
+    parser.add_argument('--adaptive_alpha', type=bool, help="enable adaptive alpha")
+    parser.add_argument('--adaptive_policy', type=float, help="linear=true, exponential=false")
+    parser.add_argument('--increase', type=bool, help="increase=true, decrease=false")
     parser.add_argument('--out', type=str, help="output file")
 
     args = parser.parse_args()

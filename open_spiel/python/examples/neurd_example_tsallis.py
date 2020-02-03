@@ -43,7 +43,7 @@ flags.DEFINE_float("adaptive_policy", 1, "1 for linear, 2 for exp")
 flags.DEFINE_float("gamma", 0.99, "param for exp adaptive policy")
 flags.DEFINE_float("random_seed", 1, "random seed")
 flags.DEFINE_integer("players", 2, "Number of players")
-flags.DEFINE_integer("print_freq", 100 , "How often to print the exploitability")
+flags.DEFINE_integer("print_freq", 1 , "How often to print the exploitability")
 flags.DEFINE_integer("num_hidden_layers", 1,
                      "The number of hidden layers in the policy model.")
 flags.DEFINE_integer("num_hidden_units", 512,

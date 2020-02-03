@@ -39,7 +39,7 @@ flags.DEFINE_string("game", "kuhn_poker", "Name of the game")
 flags.DEFINE_float("alpha", 1.3, "Alpha for Tsallis")
 flags.DEFINE_boolean("adaptive_alpha", False, "Whether use adaptive alpha")
 flags.DEFINE_float("alpha0", 1.0, "Initial alpha")
-flags.DEFINE_float("random_seed", 1, "random seed")
+flags.DEFINE_integer("random_seed", 1, "random seed")
 flags.DEFINE_integer("players", 2, "Number of players")
 flags.DEFINE_integer("print_freq", 1, "How often to print the exploitability")
 flags.DEFINE_integer("num_hidden_layers", 1,

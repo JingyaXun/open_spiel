@@ -50,6 +50,7 @@ def plot_stacked(data_path, files, experiments, iterations):
                 
                 # data_float = np.array(l[:-1]).astype(np.float)
                 data_float = np.array(l[:iterations]).astype(np.float)
+                print(data_float)
                 data[i] = data_float
                 
         data = np.average(data, axis=0)
@@ -68,9 +69,9 @@ def plot_stacked(data_path, files, experiments, iterations):
     plt.xscale("linear")
     plt.yscale("log")
     plt.legend(loc="upper right")
-    plt.title("Kuhn_Poker linear decrease")
+    plt.title("Kuhn_Poker exponential increase")
     
-    plt.savefig(os.path.join(data_path, "plot/kuhn_poker_stacked_8000_lin_dec.png"))
+    plt.savefig(os.path.join(data_path, "plot/kuhn_poker_stacked_8000_exp_inc.png"))
 
 def plot_single_confidence(data_path, file, experiments, iterations):
     # data preprocessing, take average
@@ -111,8 +112,8 @@ def plot_single_confidence(data_path, file, experiments, iterations):
 
 
 if __name__ == '__main__':
-    experiments = 10
-    iterations = 8000
+    experiments = 1
+    iterations = 10
 
     data_path = "ICML_Experiments_Dynamics/kuhn_adaptive/"
 
@@ -150,10 +151,10 @@ if __name__ == '__main__':
 
     files=[
         "kuhn_8000_1.txt",
-        "kuhn_8000_lin_dec_1.1.txt",
-        "kuhn_8000_lin_dec_1.2.txt",
-        "kuhn_8000_lin_dec_1.3.txt",
-        "kuhn_8000_lin_dec_1.4.txt"]
+        "kuhn_8000_exp_dec_1.1.txt",
+        "kuhn_8000_exp_dec_1.2.txt",
+        "kuhn_8000_exp_dec_1.3.txt",
+        "kuhn_8000_exp_dec_1.4.txt"]
 
     #plot_single(data_path, "kuhn_poker_tsallis_1.09.txt", experiments, iterations)
 

@@ -1,55 +1,35 @@
 # kuhn_poker, incrrease, linear, different alpha
-cd /root/Documents/ICML2020/open_spiel/open_spiel/python/examples
-export PYTHONPATH=$PYTHONPATH:/root/Documents/ICML2020/open_spiel
-export PYTHONPATH=$PYTHONPATH:/root/Documents/ICML2020/open_spiel/build/python
-source ../../../venv/bin/activate
+if [ $# -eq 0 ]
+then
+    echo "format: ./experiments.sh [game: kuhn_poker | leduc_poker] [adaptive_alpha: 1 | 0] [increase: 1 | 0] [adaptive_policy: 1 | 2] [alpha: 1]"
+    printf "[adaptive_alpha]: 1: adaptive, 0: fixed"
+    printf "[increase]: 1: increase, 0: decrease\n"
+    printf "[adaptive_policy]: 1: linear, 2: exponential\n"
+    echo "[alpha]: alpha"
+    exit 1
+fi
+
+GAME=$1; shift
+ADAPTIVE_ALPHA=$1; shift
+INCREASE=$1; shift
+ADAPTIVE_POLICY=$1; shift
+ALPHA=$1
+NUM_EXPERIMENTS=10
+ITERATIONS=100
+OUT_DIR=ICML_Experiments_Dynamics
+POLICY=lin
+
+if [ $ADAPTIVE_POLICY -eq 2 ]
+then
+    POLICY=exp
+fi
 
 python icml_experiments_multiprocessing.py \
---num_experiments=10 \
---iterations=8000 \
---game=kuhn_poker \
---alpha=1 \
---adaptive_alpha=True  \
---increase=1 \
---adaptive_policy=2 \
---out=ICML_Experiments_Dynamics/kuhn_adaptive/kuhn_8000_exp_1.txt &
-
-python icml_experiments_multiprocessing.py \
---num_experiments=10 \
---iterations=8000 \
---game=kuhn_poker \
---alpha=1.1 \
---adaptive_alpha=True  \
---increase=1 \
---adaptive_policy=2 \
---out=ICML_Experiments_Dynamics/kuhn_adaptive/kuhn_8000_exp_inc_1.1.txt &
-
-python icml_experiments_multiprocessing.py \
---num_experiments=10 \
---iterations=8000 \
---game=kuhn_poker \
---alpha=1.2 \
---adaptive_alpha=True  \
---increase=1 \
---adaptive_policy=2 \
---out=ICML_Experiments_Dynamics/kuhn_adaptive/kuhn_8000_exp_inc_1.2.txt &
-
-python icml_experiments_multiprocessing.py \
---num_experiments=10 \
---iterations=8000 \
---game=kuhn_poker \
---alpha=1.3 \
---adaptive_alpha=True  \
---increase=1 \
---adaptive_policy=2 \
---out=ICML_Experiments_Dynamics/kuhn_adaptive/kuhn_8000_exp_inc_1.3.txt &
-
-python icml_experiments_multiprocessing.py \
---num_experiments=10 \
---iterations=8000 \
---game=kuhn_poker \
---alpha=1.4 \
---adaptive_alpha=True  \
---increase=1 \
---adaptive_policy=2 \
---out=ICML_Experiments_Dynamics/kuhn_adaptive/kuhn_8000_exp_inc_1.4.txt
+--num_experiments=$NUM_EXPERIMENTS \
+--iterations=$ITERATIONS \
+--game=$GAME \
+--alpha=$ALPHA \
+--adaptive_alpha=$ADAPTIVE_ALPHA  \
+--increase=$INCREASE \
+--adaptive_policy=$ADAPTIVE_POLICY \
+--out=$OUT_DIR/${GAME}_experiments/${GAME}_${ADAPTIVE_ALPHA}_${INCREASE}_${POLICY}_${ALPHA}_${ITERATIONS}.txt &

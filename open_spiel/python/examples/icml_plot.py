@@ -112,10 +112,12 @@ def plot_single_confidence(data_path, file, experiments, iterations):
 
 
 if __name__ == '__main__':
-    experiments = 1
-    iterations = 10
+    experiments = 10
+    iterations = 4000
 
     data_path = "ICML_Experiments_Dynamics/kuhn_adaptive/"
+
+    data_path = "tmp_test_folder/"
 
     file = "kuhn_poker_dynamics_alpha_2.5w_1.1.txt"
 
@@ -155,6 +157,10 @@ if __name__ == '__main__':
         "kuhn_8000_exp_dec_1.2.txt",
         "kuhn_8000_exp_dec_1.3.txt",
         "kuhn_8000_exp_dec_1.4.txt"]
+
+    files=[
+        "kuhn_4000_lin_dec_1.2.txt",
+        "kuhn_4000_lin_inc_1.2.txt"]
 
     #plot_single(data_path, "kuhn_poker_tsallis_1.09.txt", experiments, iterations)
 

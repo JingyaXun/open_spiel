@@ -5,7 +5,8 @@ import numpy as np
 from numpy import array
 
 def experiment(args, seed, q):
-        
+    # print("args.increase: "+args.increase+"\n")
+    # print("str: "+str(args.increase)+"\n")
     proc = subprocess.Popen(["python", "./neurd_example_tsallis.py", 
                 "--alpha="+str(args.alpha),
                 "--iterations="+str(args.iterations),
@@ -27,15 +28,18 @@ def experiment(args, seed, q):
 def hello(seed):
     print("hello " + str(seed))
 
-def listener(q, file):
+def listener(q, file, args):
     '''listens for messages on the q, writes to file. '''
 
     with open(file, 'w') as f:
+        f.write(str(args) + '\n')
+        f.write("="*50)
         while 1:
             m = q.get()
             if m == 'kill':
                 f.write('killed')
                 break
+
             f.write(str(m) + '\n')
             f.flush()
 
@@ -49,7 +53,7 @@ def main():
     parser.add_argument('--alpha', type=float, help="Alpha for Tsallis")
     parser.add_argument('--adaptive_alpha', type=bool, help="enable adaptive alpha")
     parser.add_argument('--adaptive_policy', type=float, help="linear=true, exponential=false")
-    parser.add_argument('--increase', type=bool, help="increase=true, decrease=false")
+    parser.add_argument('--increase', type=int, help="increase=true, decrease=false")
     parser.add_argument('--out', type=str, help="output file")
 
     args = parser.parse_args()
@@ -60,7 +64,7 @@ def main():
     pool = mp.Pool(mp.cpu_count() + 2)
 
     #put listener to work first
-    watcher = pool.apply_async(listener, (q,args.out,))
+    watcher = pool.apply_async(listener, (q,args.out,args,))
 
     #fire off workers
     jobs = []

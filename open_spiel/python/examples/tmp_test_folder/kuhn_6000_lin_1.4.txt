@@ -1,0 +1,21 @@
+Namespace(adaptive_alpha=True, adaptive_policy=1.0, alpha=1.2, game='kuhn_poker', increase=True, iterations=20, num_experiments=10, out='tmp_test_folder/kuhn_6000_lin_1.4.txt')
+==================================================['']
+Namespace(adaptive_alpha=True, adaptive_policy=1.0, alpha=1.2, game='kuhn_poker', increase=True, iterations=20, num_experiments=10, out='tmp_test_folder/kuhn_6000_lin_1.4.txt')
+==================================================['']
+Namespace(adaptive_alpha=True, adaptive_policy=1.0, alpha=1.2, game='kuhn_poker', increase=True, iterations=20, num_experiments=10, out='tmp_test_folder/kuhn_6000_lin_1.4.txt')
+==================================================['']
+Namespace(adaptive_alpha=True, adaptive_policy=1.0, alpha=1.2, game='kuhn_poker', increase=True, iterations=20, num_experiments=10, out='tmp_test_folder/kuhn_6000_lin_1.4.txt')
+==================================================['']
+Namespace(adaptive_alpha=True, adaptive_policy=1.0, alpha=1.2, game='kuhn_poker', increase=True, iterations=20, num_experiments=10, out='tmp_test_folder/kuhn_6000_lin_1.4.txt')
+==================================================['']
+Namespace(adaptive_alpha=True, adaptive_policy=1.0, alpha=1.2, game='kuhn_poker', increase=True, iterations=20, num_experiments=10, out='tmp_test_folder/kuhn_6000_lin_1.4.txt')
+==================================================['']
+Namespace(adaptive_alpha=True, adaptive_policy=1.0, alpha=1.2, game='kuhn_poker', increase=True, iterations=20, num_experiments=10, out='tmp_test_folder/kuhn_6000_lin_1.4.txt')
+==================================================['']
+Namespace(adaptive_alpha=True, adaptive_policy=1.0, alpha=1.2, game='kuhn_poker', increase=True, iterations=20, num_experiments=10, out='tmp_test_folder/kuhn_6000_lin_1.4.txt')
+==================================================['']
+Namespace(adaptive_alpha=True, adaptive_policy=1.0, alpha=1.2, game='kuhn_poker', increase=True, iterations=20, num_experiments=10, out='tmp_test_folder/kuhn_6000_lin_1.4.txt')
+==================================================['']
+Namespace(adaptive_alpha=True, adaptive_policy=1.0, alpha=1.2, game='kuhn_poker', increase=True, iterations=20, num_experiments=10, out='tmp_test_folder/kuhn_6000_lin_1.4.txt')
+==================================================['']
+killed

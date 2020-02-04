@@ -1,4 +1,9 @@
 # kuhn_poker, incrrease, linear, different alpha
+cd /root/Documents/ICML2020/open_spiel/open_spiel/python/examples
+export PYTHONPATH=$PYTHONPATH:/root/Documents/ICML2020/open_spiel
+export PYTHONPATH=$PYTHONPATH:/root/Documents/ICML2020/open_spiel/build/python
+source ../../../venv/bin/activate
+
 python icml_experiments_multiprocessing.py \
 --num_experiments=10 \
 --iterations=8000 \

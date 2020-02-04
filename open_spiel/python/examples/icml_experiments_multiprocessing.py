@@ -33,7 +33,8 @@ def listener(q, file, args):
 
     with open(file, 'w') as f:
         f.write(str(args) + '\n')
-        f.write("="*50)
+        f.write("="*50) 
+        f.write("\n")
         while 1:
             m = q.get()
             if m == 'kill':

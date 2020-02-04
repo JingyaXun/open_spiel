@@ -52,7 +52,7 @@ def main():
     parser.add_argument('--iterations', type=int, help="Number of iterations")
     parser.add_argument('--game', type=str, help="Name of the game")
     parser.add_argument('--alpha', type=float, help="Alpha for Tsallis")
-    parser.add_argument('--adaptive_alpha', type=bool, help="enable adaptive alpha")
+    parser.add_argument('--adaptive_alpha', type=int, help="enable adaptive alpha")
     parser.add_argument('--adaptive_policy', type=float, help="linear=true, exponential=false")
     parser.add_argument('--increase', type=int, help="increase=true, decrease=false")
     parser.add_argument('--out', type=str, help="output file")

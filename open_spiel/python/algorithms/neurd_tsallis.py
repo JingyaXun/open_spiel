@@ -253,7 +253,7 @@ class CounterfactualNeurdSolver(object):
       else:
         adaptive_alpha = alpha
 
-      # print(adaptive_alpha)
+      print(adaptive_alpha)
 
       tsallis = TsallisLoss(alpha=adaptive_alpha)
       tensor = tsallis.predict(stacked_tensor.numpy())[0] 
@@ -266,7 +266,7 @@ class CounterfactualNeurdSolver(object):
     else:
       alpha = large_alpha - (float(current_iteration) / total_iteration) * (large_alpha-1)
     
-    return round(alpha, 2)
+    return max(1, round(alpha, 2))
   
 
   def _exp_update(self, large_alpha, current_iteration, total_iteration, gamma, increase):
@@ -286,7 +286,7 @@ class CounterfactualNeurdSolver(object):
       alpha = large_alpha * (gamma**times)
 
     
-    return round(alpha, 2)
+    return max(1, round(alpha, 2))
 
 
 
@@ -322,7 +322,7 @@ class CounterfactualNeurdSolver(object):
     """The player for whom the average policy should be updated."""
     return self._previous_player(regret_player)
 
-  def evaluate_and_update_policy(self, train_fn, alpha, increase, gamma, adaptive_policy, total_iteration, current_iteration=None):
+  def evaluate_and_update_policy(self, train_fn, alpha, increase=None, gamma=None, adaptive_policy=None, total_iteration=None, current_iteration=None):
     """Performs a single step of policy evaluation and policy improvement.
 
     Args:

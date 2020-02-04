@@ -34,10 +34,10 @@ tf.enable_eager_execution()
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_integer("iterations", 100, "Number of iterations")
+flags.DEFINE_integer("iterations", 1000, "Number of iterations")
 flags.DEFINE_string("game", "kuhn_poker", "Name of the game")
-flags.DEFINE_float("alpha", 1.2, "Alpha for Tsallis")
-flags.DEFINE_integer("adaptive_alpha", 1, "Whether use adaptive alpha")
+flags.DEFINE_float("alpha", 1.4, "Alpha for Tsallis")
+flags.DEFINE_integer("adaptive_alpha", 0, "Whether use adaptive alpha")
 flags.DEFINE_integer("increase", 0, "Whether increase alpha or not")
 flags.DEFINE_integer("adaptive_policy", 2, "1 for linear, 2 for exp")
 flags.DEFINE_float("gamma", 0.99, "param for exp adaptive policy")
@@ -99,7 +99,7 @@ def main(_):
         autoencoder_loss=(tf.compat.v1.losses.huber_loss
                           if FLAGS.autoencode else None))
 
-  start_time = time.time()
+  # start_time = time.time()
   for i in range(FLAGS.iterations):
         # send i into the function to notify the adaptation of alpha
     
@@ -111,8 +111,8 @@ def main(_):
       conv = pyspiel.exploitability(game, solver.average_policy())
       print("Iteration {} exploitability {}".format(i, conv))
     
-  end_time = time.time()
-  print(end_time - start_time)
+  # end_time = time.time()
+  # print(end_time - start_time)
 
 
 if __name__ == "__main__":

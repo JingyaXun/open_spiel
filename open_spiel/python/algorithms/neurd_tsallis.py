@@ -253,7 +253,7 @@ class CounterfactualNeurdSolver(object):
       else:
         adaptive_alpha = alpha
 
-      print(adaptive_alpha)
+      # print(adaptive_alpha)
 
       tsallis = TsallisLoss(alpha=adaptive_alpha)
       tensor = tsallis.predict(stacked_tensor.numpy())[0] 

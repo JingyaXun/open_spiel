@@ -15,8 +15,8 @@ INCREASE=$1; shift
 ADAPTIVE_POLICY=$1; shift
 ALPHA=$1
 NUM_EXPERIMENTS=5
-ITERATIONS=5000
-OUT_DIR=ICML_Experiments_Dynamics
+ITERATIONS=100
+OUT_DIR=ICML_Experiments_Dynamics_test
 POLICY=lin
 
 if [ $ADAPTIVE_POLICY -eq 2 ]
@@ -32,4 +32,4 @@ python icml_experiments_multiprocessing.py \
 --adaptive_alpha=$ADAPTIVE_ALPHA  \
 --increase=$INCREASE \
 --adaptive_policy=$ADAPTIVE_POLICY \
---out=$OUT_DIR/${GAME}_experiments/${GAME}_${ADAPTIVE_ALPHA}_${INCREASE}_${POLICY}_${ALPHA}_${ITERATIONS}.txt &
+--out=$OUT_DIR/${GAME}_experiments/${GAME}_${ADAPTIVE_ALPHA}_${INCREASE}_${POLICY}_${ALPHA}_${ITERATIONS}_3_1024.txt &

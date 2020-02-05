@@ -28,7 +28,7 @@ run_experiment() {
     EXPLOIT_RATE=$1;shift
     EXP_EXPLOIT_RATE=$1
     NUM_EXPERIMENTS=5
-    ITERATIONS=100
+    ITERATIONS=10000
     OUT_DIR=ICML_Experiments_Dynamics
     POLICY=lin
 
@@ -74,7 +74,9 @@ then
     done
 
 # 582
-elif [ $(hostname) = "tim3-77549f558f-7nzdv" ]
+# tim3-77549f558f-7nzdv
+# 586
+elif [ $(hostname) = "tim1-5b5474c799-qtssh " ]
 then
     # experiments for adaptive alpha
     for semi_percent in 0.2 0.5

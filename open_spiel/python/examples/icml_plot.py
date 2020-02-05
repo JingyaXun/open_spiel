@@ -58,7 +58,7 @@ def plot_stacked(data_path, files, experiments, iterations):
 
     # plot 
     x_axis = array(range(iterations))+1
-    alpha = 1.1
+    alpha = 1.0
     for data in data_list:
          plt.plot(x_axis, data, label=format(alpha, '.2f') )
          alpha += 0.1
@@ -69,9 +69,13 @@ def plot_stacked(data_path, files, experiments, iterations):
     plt.xscale("linear")
     plt.yscale("log")
     plt.legend(loc="upper right")
-    plt.title("Leduc_Poker exponential increase")
+    plt.title("Leduc_Poker Dynamics")
     
-    plt.savefig(os.path.join(data_path, "plot/leduc_poker_stacked_10000_exp_inc.png"))
+    # plt.savefig(os.path.join(data_path, "plot/leduc_poker_stacked_10000_dynamics.png"))
+
+    plt.tight_layout()
+    plt.margins(0.08,0.08)
+    plt.savefig(os.path.join(data_path,"plot/kuhn_poker_stacked_8000_lin_inc.pdf"), format='pdf', dpi=2000)
 
 def plot_single_confidence(data_path, file, experiments, iterations):
     # data preprocessing, take average
@@ -113,11 +117,11 @@ def plot_single_confidence(data_path, file, experiments, iterations):
 
 if __name__ == '__main__':
     experiments = 10
-    iterations = 10000
+    iterations = 8000
 
     data_path = "ICML_Experiments_Dynamics/kuhn_adaptive/"
 
-    data_path = "ICML_Experiments_Dynamics/leduc_poker_experiments/"
+    # data_path = "ICML_Experiments_Dynamics/leduc_poker_experiments/"
 
     file = "kuhn_poker_dynamics_alpha_2.5w_1.1.txt"
 
@@ -151,12 +155,18 @@ if __name__ == '__main__':
              "leduc_adaptive_8000_linear_decrease_1.4.txt",
              "leduc_8000_1.txt"]
 
-    files=[
-        "leduc_poker_1_1_exp_1.1_10000.txt",
-        "leduc_poker_1_1_exp_1.2_10000.txt",
-        "leduc_poker_1_1_exp_1.3_10000.txt",
-        "leduc_poker_1_1_exp_1.4_10000.txt",
-        "leduc_poker_1_1_exp_1.5_10000.txt"]
+    # files=[
+    #     "leduc_poker_1_1_exp_1.1_10000.txt",
+    #     "leduc_poker_1_1_exp_1.2_10000.txt",
+    #     "leduc_poker_1_1_exp_1.3_10000.txt",
+    #     "leduc_poker_1_1_exp_1.4_10000.txt",
+    #     "leduc_poker_1_1_exp_1.5_10000.txt"]
+
+    files = ["kuhn_8000_1.txt",
+             "kuhn_8000_lin_inc_1.1.txt",
+             "kuhn_8000_lin_inc_1.2.txt",
+             "kuhn_8000_lin_inc_1.3.txt",
+             "kuhn_8000_lin_inc_1.4.txt"]
 
     #plot_single(data_path, "kuhn_poker_tsallis_1.09.txt", experiments, iterations)
 

@@ -10,6 +10,7 @@ mkdir -p /root/Documents/ICML2020/open_spiel/open_spiel/python/examples/ICML_Exp
 chmod +x experiments.sh
 if [ $(hostname) = "tim1-5b5474c799-qtssh" ]
 then
+    #31586
     # experiments for adaptive alpha
     for alpha in 1.1 1.2 1.3 1.4
     do
@@ -19,10 +20,11 @@ then
 
 elif [ $(hostname) = "tim2-667758c9c5-876lw" ]
 then
+    #31584
     # experiments for fixed alpha
-    for alpha in 1 1.1 1.2 1.3
+    for alpha in 1.1 1.2 1.3 1.4
     do
-        ./experiments.sh leduc_poker 0 1 1 $alpha
+        ./experiments.sh leduc_poker 1 0 2 $alpha
     done 
 elif [ $(hostname) = "tim3-77549f558f-7nzdv" ]
 then
@@ -33,6 +35,7 @@ then
         ./experiments.sh leduc_poker 1 0 2  $alpha
     done
 else
+    #31588
     # experiments for fixed alpha
     for alpha in 1.4 1.5
     do

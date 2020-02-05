@@ -26,10 +26,11 @@ then
     done 
 elif [ $(hostname) = "tim3-77549f558f-7nzdv" ]
 then
+    # 31582
     # experiments for adaptive alpha
     for alpha in 1.1 1.2 1.3 1.4
     do
-        ./experiments.sh leduc_poker 1 1 2 $alpha
+        ./experiments.sh leduc_poker 1 0 2  $alpha
     done
 else
     # experiments for fixed alpha

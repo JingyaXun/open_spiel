@@ -50,8 +50,10 @@ run_experiment() {
     --exploit_rate=$EXPLOIT_RATE \
     --exp_exploit_rate=$EXP_EXPLOIT_RATE &
 }
-
-if [ $(hostname) = "tim1-5b5474c799-qtssh" ]
+# 586
+#  tim1-5b5474c799-qtssh 
+# 580
+if [ $(hostname) = "tim6-666d9955f7-5hcpb" ] 
 then
     # experiments for adaptive alpha
     for alpha in 1.02 1.04 1.06 1.08
@@ -62,7 +64,7 @@ then
         done
     done
 
-
+# 584
 elif [ $(hostname) = "tim2-667758c9c5-876lw" ]
 then
     # experiments for fixed alpha
@@ -71,6 +73,7 @@ then
         run_experiment leduc_poker 1 1 4 1 0.2 100 $exp_exploit_rate
     done
 
+# 582
 elif [ $(hostname) = "tim3-77549f558f-7nzdv" ]
 then
     # experiments for adaptive alpha

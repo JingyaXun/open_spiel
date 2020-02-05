@@ -76,7 +76,7 @@ then
 # 582
 # tim3-77549f558f-7nzdv
 # 586
-elif [ $(hostname) = "tim1-5b5474c799-qtssh " ]
+elif [ $(hostname) = "tim1-5b5474c799-qtssh" ]
 then
     # experiments for adaptive alpha
     for semi_percent in 0.2 0.5

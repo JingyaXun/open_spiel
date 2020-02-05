@@ -37,11 +37,15 @@ then
 else
     #31588
     # experiments for fixed alpha
-    for alpha in 1.4 1.5
+    # for alpha in 1.4 1.5
+    # do
+    #     ./experiments.sh leduc_poker 0 1 1 $alpha
+    # done
+    # ./experiments.sh leduc_poker 1 1 1 1.5
+    # ./experiments.sh leduc_poker 1 1 2 1.5
+    for alpha in 1.1 1.2 1.3 1.4
     do
-        ./experiments.sh leduc_poker 0 1 1 $alpha
+        ./experiments.sh matching_pennies_3p 1 1 1  $alpha
     done
-    ./experiments.sh leduc_poker 1 1 1 1.5
-    ./experiments.sh leduc_poker 1 1 2 1.5
 fi
 

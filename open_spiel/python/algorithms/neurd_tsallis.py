@@ -214,11 +214,11 @@ class CounterfactualNeurdSolver(object):
         np.zeros(n) for n in self._root_wrapper.num_player_sequences
     ]
 
-  def _sequence_weights(self, alpha=None, increase=None, gamma=None, adaptive_policy=None, total_iteration=None, player=None, current_iteration=None):
+  def _sequence_weights(self, alpha=None, increase=None, gamma=None, adaptive_policy=None, total_iteration=None, player=None, current_iteration=None, exploit_rate=None, semi_percent=None, conv=None, exp_exploit_rate=None):
     """Returns exponentiated weights for each sequence as an `np.array`."""
     if player is None:
       return [
-          self._sequence_weights(alpha=alpha, increase=increase, gamma=gamma, adaptive_policy=adaptive_policy, total_iteration=total_iteration,  player=player, current_iteration=current_iteration)
+          self._sequence_weights(alpha=alpha, increase=increase, gamma=gamma, adaptive_policy=adaptive_policy, total_iteration=total_iteration,  player=player, current_iteration=current_iteration, exploit_rate=exploit_rate, semi_percent=semi_percent, conv=conv, exp_exploit_rate=exp_exploit_rate)
           for player in range(self._game.num_players())
       ]
     else:
@@ -244,30 +244,59 @@ class CounterfactualNeurdSolver(object):
         if alpha == 1:
           adaptive_alpha = alpha
         elif adaptive_policy == 1:
-          adaptive_alpha = self._linear_update(large_alpha=alpha, current_iteration=current_iteration, total_iteration=total_iteration, increase=increase)
+          adaptive_alpha = self._linear_update(large_alpha=alpha, current_iteration=current_iteration, total_iteration=total_iteration, increase=increase, semi_percent=semi_percent)
         elif adaptive_policy == 2:
           adaptive_alpha = self._exp_update(large_alpha=alpha, current_iteration=current_iteration, total_iteration=total_iteration, increase=increase, gamma=gamma)
+        elif adaptive_policy == 3:
+          adaptive_alpha = self._exploit_update(conv=conv, exploit_rate=exploit_rate)
+        elif adaptive_policy == 4:
+          adaptive_alpha = self._exp_exploit_update(conv=conv, exp_exploit_rate=exp_exploit_rate)
         else:
           print("ERROR: Policy should be either linear or exp")
 
       else:
         adaptive_alpha = alpha
 
-      # print(adaptive_alpha)
+      print(adaptive_alpha)
+      # print(conv)
 
       tsallis = TsallisLoss(alpha=adaptive_alpha)
       tensor = tsallis.predict(stacked_tensor.numpy())[0] 
+      num_zeros = np.nonzero(tensor)[0].shape[0]
+
+      # print(float(num_zeros)/tensor.shape[0])
 
       return tensor if self._session is None else self._session(tensor)
 
-  def _linear_update(self, large_alpha, current_iteration, total_iteration, increase):
-    if increase:
-      alpha = (float(current_iteration) / total_iteration) * (large_alpha-1) + 1.0
+  def _linear_update(self, large_alpha, current_iteration, total_iteration, increase, semi_percent):
+    if semi_percent == 0.5:
+      if increase:
+        alpha = (float(current_iteration) / total_iteration) * (large_alpha-1) + 1.0
+      else:
+        alpha = large_alpha - (float(current_iteration) / total_iteration) * (large_alpha-1)
     else:
-      alpha = large_alpha - (float(current_iteration) / total_iteration) * (large_alpha-1)
+      if increase:
+        if current_iteration <= 0.5*total_iteration:
+          alpha = (float(current_iteration) / total_iteration) * 2 * semi_percent * (large_alpha-1) + 1.0
+        else:
+          alpha = 1.0 + (large_alpha-1)*semi_percent + (float(current_iteration-0.5*total_iteration)*2 / total_iteration) * (large_alpha-1-(large_alpha-1)*semi_percent )
+      else:
+        print("DO not use decrease with semi!")
     
-    return max(1, round(alpha, 2))
+    return min(max(1, round(alpha, 3)), 1.5)
   
+
+  def _exploit_update(self, conv, exploit_rate):
+    alpha = 1 + (1.0/(exploit_rate*conv))
+
+    return min(max(1, round(alpha, 3)), 1.5)
+
+  
+  def _exp_exploit_update(self, conv, exp_exploit_rate):
+    alpha = 1 + (1.0/(exp_exploit_rate*math.exp(-conv)))
+
+    return min(max(1, round(alpha, 3)), 1.5)
+
 
   def _exp_update(self, large_alpha, current_iteration, total_iteration, gamma, increase):
     # print("large_alpha: ", large_alpha)
@@ -286,7 +315,7 @@ class CounterfactualNeurdSolver(object):
       alpha = large_alpha * (gamma**times)
 
     
-    return max(1, round(alpha, 2))
+    return min(max(1, round(alpha, 3)), 1.5)
 
 
 
@@ -322,7 +351,7 @@ class CounterfactualNeurdSolver(object):
     """The player for whom the average policy should be updated."""
     return self._previous_player(regret_player)
 
-  def evaluate_and_update_policy(self, train_fn, alpha, increase=None, gamma=None, adaptive_policy=None, total_iteration=None, current_iteration=None):
+  def evaluate_and_update_policy(self, train_fn, alpha, increase=None, gamma=None, adaptive_policy=None, total_iteration=None, current_iteration=None, semi_percent=None, exploit_rate=None, conv=None, exp_exploit_rate=None):
     """Performs a single step of policy evaluation and policy improvement.
 
     Args:
@@ -330,7 +359,7 @@ class CounterfactualNeurdSolver(object):
         regression model to accurately reproduce the x to y mapping given x-y
         data.
     """
-    sequence_weights = self._sequence_weights(current_iteration=current_iteration, alpha=alpha, increase=increase, gamma=gamma, adaptive_policy=adaptive_policy, total_iteration=total_iteration)
+    sequence_weights = self._sequence_weights(current_iteration=current_iteration, alpha=alpha, increase=increase, gamma=gamma, adaptive_policy=adaptive_policy, total_iteration=total_iteration, semi_percent=semi_percent, exploit_rate=exploit_rate, conv=conv, exp_exploit_rate=exp_exploit_rate)
     player_seq_features = self._root_wrapper.sequence_features
     for regret_player in range(self._game.num_players()):
       seq_prob_player = self._average_policy_update_player(regret_player)
@@ -347,7 +376,7 @@ class CounterfactualNeurdSolver(object):
 
       regret_player_model = self._models[regret_player]
       train_fn(regret_player_model, data)
-      sequence_weights[regret_player] = self._sequence_weights(player=regret_player, current_iteration=current_iteration, alpha=alpha, increase=increase, gamma=gamma, adaptive_policy=adaptive_policy, total_iteration=total_iteration)
+      sequence_weights[regret_player] = self._sequence_weights(player=regret_player, current_iteration=current_iteration, alpha=alpha, increase=increase, gamma=gamma, adaptive_policy=adaptive_policy, total_iteration=total_iteration, semi_percent=semi_percent, exploit_rate=exploit_rate, conv=conv, exp_exploit_rate=exp_exploit_rate)
 
 
 # Author: Mathieu Blondel

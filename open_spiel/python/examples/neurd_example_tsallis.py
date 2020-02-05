@@ -36,11 +36,14 @@ FLAGS = flags.FLAGS
 
 flags.DEFINE_integer("iterations", 1000, "Number of iterations")
 flags.DEFINE_string("game", "kuhn_poker", "Name of the game")
-flags.DEFINE_float("alpha", 1.4, "Alpha for Tsallis")
-flags.DEFINE_integer("adaptive_alpha", 0, "Whether use adaptive alpha")
-flags.DEFINE_integer("increase", 0, "Whether increase alpha or not")
-flags.DEFINE_integer("adaptive_policy", 2, "1 for linear, 2 for exp")
-flags.DEFINE_float("gamma", 0.99, "param for exp adaptive policy")
+flags.DEFINE_float("alpha", 1.2, "Alpha for Tsallis")
+flags.DEFINE_integer("adaptive_alpha", 1, "Whether use adaptive alpha")
+flags.DEFINE_integer("increase", 1, "Whether increase alpha or not")
+flags.DEFINE_integer("adaptive_policy", 4, "1 for linear, 2 for exp, 3 for exploit, 4 for exp_exploit")
+flags.DEFINE_float("semi_percent", 0.2, "param for policy 1")
+flags.DEFINE_float("gamma", 0.99, "param for policy 2")
+flags.DEFINE_float("exploit_rate", 300, "param for policy 3")
+flags.DEFINE_float("exp_exploit_rate", 5, "param for policy 4")
 flags.DEFINE_float("random_seed", 1, "random seed")
 flags.DEFINE_integer("players", 2, "Number of players")
 flags.DEFINE_integer("print_freq", 1 , "How often to print the exploitability")
@@ -70,10 +73,10 @@ flags.DEFINE_boolean(
 
 def main(_):
   tensorflow.random.set_random_seed(int(FLAGS.random_seed))
-  game = pyspiel.load_game(FLAGS.game,
-                           {"players": pyspiel.GameParameter(FLAGS.players)})
+  # game = pyspiel.load_game(FLAGS.game,
+  #                          {"players": pyspiel.GameParameter(FLAGS.players)})
 
-  # game = pyspiel.load_game(FLAGS.game)
+  game = pyspiel.load_game(FLAGS.game)
 
   models = []
   for _ in range(game.num_players()):
@@ -99,12 +102,14 @@ def main(_):
         autoencoder_loss=(tf.compat.v1.losses.huber_loss
                           if FLAGS.autoencode else None))
 
+  conv = 100
+
   # start_time = time.time()
   for i in range(FLAGS.iterations):
         # send i into the function to notify the adaptation of alpha
     
     if FLAGS.adaptive_alpha:
-      solver.evaluate_and_update_policy(_train, current_iteration=i, alpha=FLAGS.alpha, increase=FLAGS.increase, gamma=FLAGS.gamma, adaptive_policy=FLAGS.adaptive_policy, total_iteration=FLAGS.iterations)
+      solver.evaluate_and_update_policy(_train, current_iteration=i, alpha=FLAGS.alpha, increase=FLAGS.increase, gamma=FLAGS.gamma, adaptive_policy=FLAGS.adaptive_policy, total_iteration=FLAGS.iterations, semi_percent=FLAGS.semi_percent, exploit_rate=FLAGS.exploit_rate, conv=conv, exp_exploit_rate=FLAGS.exp_exploit_rate)
     else:
       solver.evaluate_and_update_policy(_train, alpha=FLAGS.alpha)
     if i % FLAGS.print_freq == 0:

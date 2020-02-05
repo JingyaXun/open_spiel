@@ -16,7 +16,7 @@ ADAPTIVE_POLICY=$1; shift
 ALPHA=$1
 NUM_EXPERIMENTS=5
 ITERATIONS=5000
-OUT_DIR=ICML_Experiments_Dynamics
+OUT_DIR=ICML_Experiments_Dynamics_Pennies
 POLICY=lin
 
 if [ $ADAPTIVE_POLICY -eq 2 ]

@@ -28,7 +28,7 @@ run_experiment() {
     EXPLOIT_RATE=$1;shift
     EXP_EXPLOIT_RATE=$1
     NUM_EXPERIMENTS=5
-    ITERATIONS=10000
+    ITERATIONS=100
     OUT_DIR=ICML_Experiments_Dynamics
     POLICY=lin
 
@@ -45,7 +45,7 @@ run_experiment() {
     --adaptive_alpha=$ADAPTIVE_ALPHA  \
     --increase=$INCREASE \
     --adaptive_policy=$ADAPTIVE_POLICY \
-    --out=$OUT_DIR/${GAME}_extra_experiments/${GAME}_${ADAPTIVE_ALPHA}_${INCREASE}_${POLICY}_${ALPHA}_${ITERATIONS}_${SEMI_PERCENT}_${EXPLOIT_RATE}_${EXP_EXPLOIT_RATE}.txt
+    --out=$OUT_DIR/${GAME}_extra_experiments/${GAME}_${ADAPTIVE_ALPHA}_${INCREASE}_${POLICY}_${ALPHA}_${ITERATIONS}_${SEMI_PERCENT}_${EXPLOIT_RATE}_${EXP_EXPLOIT_RATE}.txt \
     --semi_percent=$SEMI_PERCENT \
     --exploit_rate=$EXPLOIT_RATE \
     --exp_exploit_rate=$EXP_EXPLOIT_RATE &

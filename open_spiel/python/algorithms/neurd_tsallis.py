@@ -257,7 +257,7 @@ class CounterfactualNeurdSolver(object):
       else:
         adaptive_alpha = alpha
 
-      print(adaptive_alpha)
+      # print(adaptive_alpha)
       # print(conv)
 
       tsallis = TsallisLoss(alpha=adaptive_alpha)

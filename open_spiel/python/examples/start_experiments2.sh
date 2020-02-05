@@ -64,11 +64,11 @@ then
         done
     done
 
-# 584
+# 584 *
 elif [ $(hostname) = "tim2-667758c9c5-876lw" ]
 then
     # experiments for fixed alpha
-    for exp_exploit_rate in 5 10 15 20 25 30 35 40
+    for exp_exploit_rate in 5 10 15 20 25 30
     do
         run_experiment leduc_poker 1 1 4 1 0.2 100 $exp_exploit_rate
     done
@@ -97,6 +97,10 @@ else
     for exploit_rate in 500 600 700 800 900 1000
     do
         run_experiment leduc_poker 1 1 3 1 0.5 $exploit_rate 1
+    done
+    for exp_exploit_rate in 35 40
+    do
+        run_experiment leduc_poker 1 1 4 1 0.2 100 $exp_exploit_rate
     done
 fi
 

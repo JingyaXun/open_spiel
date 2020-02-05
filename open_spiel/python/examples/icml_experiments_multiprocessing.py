@@ -14,7 +14,11 @@ def experiment(args, seed, q):
                 "--random_seed="+str(seed),
                 "--adaptive_alpha="+str(args.adaptive_alpha),
                 "--adaptive_policy="+str(args.adaptive_policy),
-                "--increase="+str(args.increase)], stdout=subprocess.PIPE)
+                "--increase="+str(args.increase),
+                "--semi_percent="+str(args.semi_percent),
+                "--exploit_rate="+str(args.exploit_rate),
+                "--exp_exploit_rate="+str(args.exp_exploit_rate)], stdout=subprocess.PIPE)
+    
 
     data = []
     results = str(proc.stdout.read())
@@ -56,6 +60,9 @@ def main():
     parser.add_argument('--adaptive_policy', type=int, help="linear=true, exponential=false")
     parser.add_argument('--increase', type=int, help="increase=true, decrease=false")
     parser.add_argument('--out', type=str, help="output file")
+    parser.add_argument('--semi_percent', type=float, help="semi_percent")
+    parser.add_argument('--exploit_rate', type=float, help="exploit_rate")
+    parser.add_argument('--exp_exploit_rate', type=int, help="exp_exploit_rate")
 
     args = parser.parse_args()
 

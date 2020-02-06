@@ -71,11 +71,11 @@ def plot_stacked(data_path, files, experiments, iterations):
     plt.legend(loc="upper right")
     # plt.title("Leduc_Poker Dynamics")
     
-    # plt.savefig(os.path.join(data_path, "plot/leduc_poker_stacked_10000_dynamics.png"))
+    plt.savefig(os.path.join(data_path, "leduc_policy3_500-1000.png"))
 
     plt.tight_layout()
     plt.margins(0.08,0.08)
-    plt.savefig(os.path.join(data_path,"kuhn_fixed.pdf"), format='pdf', dpi=2000)
+    # plt.savefig(os.path.join(data_path,"leduc_policy3_500-1000.pdf"), format='pdf', dpi=2000)
 
 def plot_single_confidence(data_path, file, experiments, iterations):
     # data preprocessing, take average
@@ -147,14 +147,16 @@ def plot_stacked_confidence(data_path, file, experiments, iterations):
 
 
 if __name__ == '__main__':
-    experiments = 10
-    iterations = 8000
+    experiments = 5
+    iterations = 10000
 
-    data_path = "ICML_Experiments_Dynamics/kuhn_adaptive/"
+    # data_path = "ICML_Experiments_Dynamics/kuhn_adaptive/"
 
     # data_path = "ICML_Experiments_Dynamics/leduc_poker_experiments/"
 
     # data_path = "ICML_Experiments_Dynamics/"
+
+    data_path = "ICML_Experiments_Dynamics/leduc_poker_extra_experiments/"
 
     # file = "kuhn_poker_dynamics_alpha_2.5w_1.1.txt"
 
@@ -172,16 +174,19 @@ if __name__ == '__main__':
     #          "kuhn_poker_dynamics_alpha_1w_1.3.txt"
     #          ]
 
-    files = ["kuhn_8000_1.txt",
-             "kuhn_8000_lin_dec_1.1.txt",
-             "kuhn_8000_lin_dec_1.2.txt",
-             "kuhn_8000_lin_dec_1.3.txt"]
+    files = ["leduc_poker_0_1_lin_1_10000.txt",
+             "leduc_poker_1_1_lin_1_10000_0.5_500_1.txt",
+             "leduc_poker_1_1_lin_1_10000_0.5_600_1.txt",
+             "leduc_poker_1_1_lin_1_10000_0.5_700_1.txt",
+             "leduc_poker_1_1_lin_1_10000_0.5_800_1.txt",
+             "leduc_poker_1_1_lin_1_10000_0.5_900_1.txt",
+             "leduc_poker_1_1_lin_1_10000_0.5_1000_1.txt"]
 
     #plot_single(data_path, "kuhn_poker_tsallis_1.09.txt", experiments, iterations)
 
-    #plot_stacked(data_path, files, experiments, iterations)
+    plot_stacked(data_path, files, experiments, iterations)
 
-    plot_stacked_confidence(data_path, files, experiments, iterations)
+    # plot_stacked_confidence(data_path, files, experiments, iterations)
     
 
    

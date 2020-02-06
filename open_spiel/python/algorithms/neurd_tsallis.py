@@ -262,7 +262,7 @@ class CounterfactualNeurdSolver(object):
 
       tsallis = TsallisLoss(alpha=adaptive_alpha)
       tensor = tsallis.predict(stacked_tensor.numpy())[0] 
-      num_zeros = np.nonzero(tensor)[0].shape[0]
+      # num_zeros = np.nonzero(tensor)[0].shape[0]
 
       # print(float(num_zeros)/tensor.shape[0])
 
@@ -289,13 +289,13 @@ class CounterfactualNeurdSolver(object):
   def _exploit_update(self, conv, exploit_rate):
     alpha = 1 + (1.0/(exploit_rate*conv))
 
-    return min(max(1, round(alpha, 3)), 1.5)
+    return max(1, round(alpha, 2))
 
   
   def _exp_exploit_update(self, conv, exp_exploit_rate):
     alpha = 1 + (1.0/(exp_exploit_rate*math.exp(-conv)))
 
-    return min(max(1, round(alpha, 3)), 1.5)
+    return max(1, round(alpha, 2))
 
 
   def _exp_update(self, large_alpha, current_iteration, total_iteration, gamma, increase):
@@ -315,7 +315,7 @@ class CounterfactualNeurdSolver(object):
       alpha = large_alpha * (gamma**times)
 
     
-    return min(max(1, round(alpha, 3)), 1.5)
+    return max(1, round(alpha, 2))
 
 
 

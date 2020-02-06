@@ -283,7 +283,7 @@ class CounterfactualNeurdSolver(object):
       else:
         print("DO not use decrease with semi!")
     
-    return min(max(1, round(alpha, 3)), 1.5)
+    return max(1, round(alpha, 2))
   
 
   def _exploit_update(self, conv, exploit_rate):

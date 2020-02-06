@@ -1,0 +1,13 @@
+Namespace(adaptive_alpha=0, adaptive_policy=1, alpha=1.0, exp_exploit_rate=1, exploit_rate=100.0, game='kuhn_poker', increase=1, iterations=10000, num_experiments=10, out='ICML_Experiments_Dynamics_2players/kuhn_poker_experiments/kuhn_poker_0_1_lin_1_10000_0.5_100_1.txt', semi_percent=0.5)
+==================================================
+["b''"]
+["b''"]
+["b''"]
+["b''"]
+["b''"]
+["b''"]
+["b''"]
+["b''"]
+["b''"]
+["b''"]
+killed

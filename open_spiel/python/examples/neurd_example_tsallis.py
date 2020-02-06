@@ -47,9 +47,9 @@ flags.DEFINE_float("exp_exploit_rate", 5, "param for policy 4")
 flags.DEFINE_float("random_seed", 1, "random seed")
 flags.DEFINE_integer("players", 2, "Number of players")
 flags.DEFINE_integer("print_freq", 1 , "How often to print the exploitability")
-flags.DEFINE_integer("num_hidden_layers", 1,
+flags.DEFINE_integer("num_hidden_layers", 2,
                      "The number of hidden layers in the policy model.")
-flags.DEFINE_integer("num_hidden_units", 13,
+flags.DEFINE_integer("num_hidden_units", 128,
                      "The number of hidden layers in the policy model.")
 flags.DEFINE_integer(
     "num_hidden_factors", 8,

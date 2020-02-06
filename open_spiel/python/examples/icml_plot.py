@@ -200,7 +200,7 @@ def plot_lines (data_path, file, experiments, iterations):
 
 if __name__ == '__main__':
     experiments = 10
-    iterations = 10000
+    iterations = 8000
 
     data_path = "ICML_Experiments_Dynamics_2players/kuhn_poker_experiments/"
     # data_path = "ICML_Experiments_Dynamics/leduc_poker_experiments/"
@@ -227,10 +227,10 @@ if __name__ == '__main__':
     #          "kuhn_poker_dynamics_alpha_1w_1.3.txt"
     #          ]
 
-    files = ["kuhn_poker_1_1_lin_1_10000_0.5_100_1.txt",
-             "kuhn_poker_1_1_lin_1.1_10000_0.5_100_1.txt",
-             "kuhn_poker_1_1_lin_1.2_10000_0.5_100_1.txt",
-             "kuhn_poker_1_1_lin_1.3_10000_0.5_100_1.txt"]
+    files = ["kuhn_poker_1_1_lin_1_8000_0.5_100_1.txt",
+             "kuhn_poker_1_1_lin_1.1_8000_0.5_100_1.txt",
+             "kuhn_poker_1_1_lin_1.2_8000_0.5_100_1.txt",
+             "kuhn_poker_1_1_lin_1.3_8000_0.5_100_1.txt"]
 
     #plot_single(data_path, "kuhn_poker_tsallis_1.09.txt", experiments, iterations)
 

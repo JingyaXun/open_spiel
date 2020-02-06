@@ -17,7 +17,8 @@ def experiment(args, seed, q):
                 "--increase="+str(args.increase),
                 "--semi_percent="+str(args.semi_percent),
                 "--exploit_rate="+str(args.exploit_rate),
-                "--exp_exploit_rate="+str(args.exp_exploit_rate)], stdout=subprocess.PIPE)
+                "--exp_exploit_rate="+str(args.exp_exploit_rate),
+                "--players="+str(args.players)], stdout=subprocess.PIPE)
     
 
     data = []
@@ -63,6 +64,7 @@ def main():
     parser.add_argument('--semi_percent', type=float, help="semi_percent")
     parser.add_argument('--exploit_rate', type=float, help="exploit_rate")
     parser.add_argument('--exp_exploit_rate', type=int, help="exp_exploit_rate")
+    parser.add_argument('--players', type=int, help="players")
 
     args = parser.parse_args()
 

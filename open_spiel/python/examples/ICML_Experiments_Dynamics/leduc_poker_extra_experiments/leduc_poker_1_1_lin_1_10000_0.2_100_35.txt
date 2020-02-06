@@ -1,0 +1,2 @@
+Namespace(adaptive_alpha=1, adaptive_policy=4, alpha=1.0, exp_exploit_rate=35, exploit_rate=100.0, game='leduc_poker', increase=1, iterations=10000, num_experiments=5, out='ICML_Experiments_Dynamics/leduc_poker_extra_experiments/leduc_poker_1_1_lin_1_10000_0.2_100_35.txt', semi_percent=0.2)
+==================================================

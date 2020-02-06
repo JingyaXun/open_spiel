@@ -117,7 +117,7 @@ def plot_single_confidence(data_path, file, experiments, iterations):
 
 def plot_stacked_confidence(data_path, file, experiments, iterations):
     # data preprocessing
-    df = pd.DataFrame(columns=["itr", "exploitability", "alpha"])
+    df = pd.DataFrame(columns=["itr", "exploitability", "beta"])
     alpha = 1.0
     for file in files:
         print(file)
@@ -129,14 +129,14 @@ def plot_stacked_confidence(data_path, file, experiments, iterations):
                 data_float = np.array(l[:iterations]).astype(np.float)
                 cur_itr = 1
                 for exp in data_float:
-                    df = df.append({"itr" : cur_itr, "exploitability" : exp, "alpha" : format(alpha, '.2f')}, ignore_index=True)
+                    df = df.append({"itr" : cur_itr, "exploitability" : exp, "beta" : format(alpha, '.2f')}, ignore_index=True)
                     cur_itr += 1
         alpha += 0.1
 
     # plot 
     colors = ["windows blue", "orange", "faded green", "dusty purple"]
 
-    sns.lineplot(x="itr", y="exploitability", hue="alpha", palette=sns.xkcd_palette(colors), data=df)
+    sns.lineplot(x="itr", y="exploitability", hue="beta", palette=sns.xkcd_palette(colors), data=df)
     plt.xlabel("Iteration")
     plt.ylabel("NashConv")
     plt.xscale("linear")
@@ -176,6 +176,11 @@ if __name__ == '__main__':
              "kuhn_8000_lin_dec_1.1.txt",
              "kuhn_8000_lin_dec_1.2.txt",
              "kuhn_8000_lin_dec_1.3.txt"]
+
+    # files = ["kuhn_poker_dynamics_alpha_1w_1.txt",
+    #          "kuhn_poker_dynamics_alpha_1w_1.1.txt",
+    #          "kuhn_poker_dynamics_alpha_1w_1.2.txt",
+    #          "kuhn_poker_dynamics_alpha_1w_1.3.txt"]
 
     #plot_single(data_path, "kuhn_poker_tsallis_1.09.txt", experiments, iterations)
 

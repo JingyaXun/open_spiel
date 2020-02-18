@@ -11,14 +11,16 @@ def plot_stacked_confidence(data_arr, file, q):
     alpha = 0
     df = pd.DataFrame(columns=["itr", "exploitability", "alpha"])
 
-    if file == "kuhn_8000_1.txt":
+    if file == "kuhn_poker_0_1_lin_1_10000_0.5_100_1_2.txt":
         alpha = 1
-    elif file == "kuhn_8000_lin_inc_1.1.txt":
+    elif file == "kuhn_poker_1_1_lin_1.1_10000_0.5_100_1_2_seed.txt":
         alpha = 1.1
-    elif file == "kuhn_8000_lin_inc_1.2.txt":
+    elif file == "kuhn_poker_1_1_lin_1.2_10000_0.5_100_1_2_seed.txt":
         alpha = 1.2
-    elif file == "kuhn_8000_lin_inc_1.3.txt":
+    elif file == "kuhn_poker_1_1_lin_1.3_10000_0.5_100_1_2_seed.txt":
         alpha = 1.3
+    elif file == "kuhn_poker_1_1_lin_1.4_10000_0.5_100_1_2_seed.txt":
+        alpha = 1.4
 
     cur_itr = 1
     for point in data_arr:
@@ -42,14 +44,15 @@ def listener(q,):
 
 def main():
 
-    experiments = 2
-    iterations = 8000
-    data_path = "ICML_Experiments_Dynamics/kuhn_adaptive/"
+    experiments = 10
+    iterations = 100
+    data_path = "ICML_Experiments_Final/kuhn_poker_players_experiments/2_players_seed_1-10/"
 
-    files = ["kuhn_8000_1.txt",
-             "kuhn_8000_lin_inc_1.1.txt",
-             "kuhn_8000_lin_inc_1.2.txt",
-             "kuhn_8000_lin_inc_1.3.txt"]
+    files = ["kuhn_poker_0_1_lin_1_10000_0.5_100_1_2.txt",
+             "kuhn_poker_1_1_lin_1.1_10000_0.5_100_1_2_seed.txt",
+             "kuhn_poker_1_1_lin_1.2_10000_0.5_100_1_2_seed.txt",
+             "kuhn_poker_1_1_lin_1.3_10000_0.5_100_1_2_seed.txt",
+             "kuhn_poker_1_1_lin_1.4_10000_0.5_100_1_2_seed.txt"]
     
     #must use Manager queue here, or will not work
     manager = mp.Manager()
@@ -87,7 +90,7 @@ def main():
     plt.yscale("log")
     plt.tight_layout()
     # plt.margins(0.08,0.08)
-    plt.savefig(os.path.join(data_path,"plot/kuhn_stacked_ci_lin_inc.pdf"), format='pdf', dpi=2000)
+    plt.savefig(os.path.join(data_path,"plot/kuhn_stacked_ci_lin_inc_final.pdf"), format='pdf', dpi=2000)
 
 
 

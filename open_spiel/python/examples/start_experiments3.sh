@@ -1,10 +1,10 @@
 # format: 
 # ./experiments.sh [game: kuhn_poker | leduc_poker] [adaptive_alpha: 1 | 0] [increase: 1 | 0] [adaptive_policy: 1 | 2 | 3] [alphas: 1 1.1 1.2 1.3 1.4] [semi_percent: 0.2 | 0.5] [exploit_rate: 100] [exp_exploit_rate: 1]
-cd /root/Documents/ICML2020/open_spiel/open_spiel/python/examples
-export PYTHONPATH=$PYTHONPATH:/root/Documents/ICML2020/open_spiel
-export PYTHONPATH=$PYTHONPATH:/root/Documents/ICML2020/open_spiel/build/python
+cd /home/open_spiel/open_spiel/python/examples
+export PYTHONPATH=$PYTHONPATH:/home/open_spiel
+export PYTHONPATH=$PYTHONPATH:/home/open_spiel/build/python
 source ../../../venv/bin/activate
-mkdir -p /root/Documents/ICML2020/open_spiel/open_spiel/python/examples/ICML_Experiments_Final/kuhn_poker_players_experiments
+mkdir -p /home/open_spiel/open_spiel/python/examples/ICML_Experiments_Appendix/kuhn_poker_players_experiments
 # mkdir -p /root/Documents/ICML2020/open_spiel/open_spiel/python/examples/ICML_Experiments_Dynamics_2players/leduc_poker_experiments
 
 run_experiment() {
@@ -28,9 +28,9 @@ run_experiment() {
     EXPLOIT_RATE=$1;shift
     EXP_EXPLOIT_RATE=$1;shift
     NUM_PLAYER=$1
-    NUM_EXPERIMENTS=10
-    ITERATIONS=10000
-    OUT_DIR=ICML_Experiments_Final
+    NUM_EXPERIMENTS=5
+    ITERATIONS=30000
+    OUT_DIR=ICML_Experiments_Appendix
     POLICY=lin
 
     if [ $ADAPTIVE_POLICY -eq 2 ]
@@ -53,15 +53,11 @@ run_experiment() {
     --players=$NUM_PLAYER &
 }
 
-# 580
-if [ $(hostname) = "tim6-666d9955f7-5hcpb" ] 
+# 580 / 574
+if [ $(hostname) = "zhihan3-5b96b546d8-gvhk5" ] 
 then
     # fixed alpha
-    for alpha in 1 1.1 1.2 1.3
-    do
-        run_experiment kuhn_poker 0 1 1 $alpha 0.5 100 1 3
-    done
-   
+    run_experiment kuhn_poker 1 1 1 1.2 0.5 100 1 4
 
 # 584 *
 elif [ $(hostname) = "tim2-574f54ccd9-w2wvf" ]
@@ -90,27 +86,20 @@ then
 
 # for big experiments
 # 582
-elif [ $(hostname) = "tim3-77549f558f-7nzdv" ]
+elif [ $(hostname) = "zhihan1-7dd8d7ff9c-txdpr" ]
 then
     # linear increase
-    for alpha in 1 1.05 1.1 1.15
-    do
-        run_experiment kuhn_poker 1 1 1 $alpha 0.5 100 1 4
-    done
+    run_experiment kuhn_poker 1 1 1 1.1 0.5 100 1 4
 
 # for big experiments
 #31578
-elif [ $(hostname) = "tim7-fc8754657-ndwf2" ]
+elif [ $(hostname) = "tim7-fc8754657-l6nk2" ]
 then
-    # lin inc
-    for alpha in 1.2 1.25 1.3 1.35
-    do
-        run_experiment kuhn_poker 1 1 1 $alpha 0.5 100 1 4
-    done
-
-#588
-else
-    # 3 player lin inc 1.4 
-    run_experiment kuhn_poker 0 1 1 1.4 0.5 100 1 3
+    run_experiment kuhn_poker 0 1 1 1 0.5 100 1 4
+# 576
+elif [ $(hostname) = "zhihan2-cf974b58f-ftn4q" ]
+then
+    # fixed alpha
+    run_experiment kuhn_poker 1 1 1 1.15 0.5 100 1 4
 fi
 

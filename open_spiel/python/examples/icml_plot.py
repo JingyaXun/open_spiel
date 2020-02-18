@@ -60,8 +60,11 @@ def plot_stacked(data_path, files, experiments, iterations):
 
         # keep top five results (based on the last value in the tensor)
         ind=np.argsort(data[:,-1])
-        data = data[5:, :]
-
+        data_sorted = []
+        for i in range(3):
+            data_sorted.append(data[ind[i], :])
+        data = np.array(data_sorted)
+        # print(data[:3, -1])
         data = np.average(data, axis=0)
         data_list.append(data)
 
@@ -73,7 +76,7 @@ def plot_stacked(data_path, files, experiments, iterations):
             plt.plot(x_axis, data, label="NeuRD" )
         else:
             plt.plot(x_axis, data, label="AdaGeNeuRD, "+r'$\beta$'+"="+format(alpha, '.2f') )
-        alpha += 0.1
+        alpha += 0.05
    
     # plt.plot(x_axis, data)
     plt.xlabel("Iteration", fontsize=14)
@@ -83,11 +86,11 @@ def plot_stacked(data_path, files, experiments, iterations):
     plt.legend(loc="upper right")
     # plt.title("Leduc_Poker Dynamics")
     
-    plt.savefig(os.path.join(data_path, "leduc_policy3_500-1000.png"))
+    plt.savefig(os.path.join(data_path, "kuhn_3w_lin_inc.png"))
 
     plt.tight_layout()
     plt.margins(0.08,0.08)
-    plt.savefig(os.path.join(data_path,"kuhn_lin_inc_13_8000_new_seeds.pdf"), format='pdf', dpi=2000)
+    plt.savefig(os.path.join(data_path,"kuhn_3w_lin_inc.pdf"), format='pdf', dpi=2000)
 
 def plot_single_confidence(data_path, file, experiments, iterations):
     # data preprocessing, take average
@@ -199,10 +202,10 @@ def plot_lines (data_path, file, experiments, iterations):
     plt.savefig(os.path.join(data_path,"kuhn_lin_inc_13_all_seeds.pdf"), format='pdf', dpi=2000)
 
 if __name__ == '__main__':
-    experiments = 10
-    iterations = 8000
+    experiments = 5
+    iterations = 30000
 
-    data_path = "ICML_Experiments_Dynamics_2players/kuhn_poker_experiments/"
+    data_path = "ICML_Experiments_Appendix/kuhn_poker_players_experiments/"
     # data_path = "ICML_Experiments_Dynamics/leduc_poker_experiments/"
 
     # data_path = "ICML_Experiments_Dynamics/kuhn_adaptive/"
@@ -211,27 +214,13 @@ if __name__ == '__main__':
 
     # data_path = "ICML_Experiments_Dynamics/"
 
-    file = "leduc_poker_1_1_exp_1.2_10000.txt"
+    # file = "leduc_poker_1_1_exp_1.2_10000.txt"
 
-    # files=[
-    #     "leduc_poker_1_1_exp_1.1_10000.txt",
-    #     "leduc_poker_1_1_exp_1.2_10000.txt",
-    #     "leduc_poker_1_1_exp_1.3_10000.txt",
-    #     "leduc_poker_1_1_exp_1.4_10000.txt",
-    #     "leduc_poker_1_1_exp_1.5_10000.txt"]
 
-    # files = [
-    #          "kuhn_poker_dynamics_alpha_1w_1.txt",
-    #          "kuhn_poker_dynamics_alpha_1.1.txt",
-    #          "kuhn_poker_dynamics_alpha_1w_1.2.txt",
-    #          "kuhn_poker_dynamics_alpha_1w_1.3.txt"
-    #          ]
-
-    files = ["kuhn_poker_1_1_lin_1_8000_0.5_100_1.txt",
-             "kuhn_poker_1_1_lin_1.1_8000_0.5_100_1.txt",
-             "kuhn_poker_1_1_lin_1.2_8000_0.5_100_1.txt",
-             "kuhn_poker_1_1_lin_1.3_8000_0.5_100_1.txt"]
-
+    files = ["kuhn_poker_0_1_lin_1_30000_0.5_100_1_4.txt",
+             "kuhn_poker_1_1_lin_1.05_30000_0.5_100_1_4.txt",
+             "kuhn_poker_1_1_lin_1.1_30000_0.5_100_1_4.txt",
+             "kuhn_poker_1_1_lin_1.15_30000_0.5_100_1_4.txt"]
     #plot_single(data_path, "kuhn_poker_tsallis_1.09.txt", experiments, iterations)
 
     plot_stacked(data_path, files, experiments, iterations)

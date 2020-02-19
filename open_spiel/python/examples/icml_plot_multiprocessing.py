@@ -8,43 +8,47 @@ import pandas as pd
 
 def plot_stacked_confidence(data_arr, file, q):
     # data preprocessing
-    alpha = 0
-    df = pd.DataFrame(columns=["itr", "exploitability", "alpha"])
+    beta = 0
+    df = pd.DataFrame(columns=["itr", "exploitability", "beta"])
 
     if file == "kuhn_poker_0_1_lin_1_10000_0.5_100_1_2.txt":
-        alpha = 1
+        beta = 1
     elif file == "kuhn_poker_1_1_lin_1.1_10000_0.5_100_1_2_seed.txt":
-        alpha = 1.1
+        beta = 1.1
     elif file == "kuhn_poker_1_1_lin_1.2_10000_0.5_100_1_2_seed.txt":
-        alpha = 1.2
+        beta = 1.2
     elif file == "kuhn_poker_1_1_lin_1.3_10000_0.5_100_1_2_seed.txt":
-        alpha = 1.3
+        beta = 1.3
     elif file == "kuhn_poker_1_1_lin_1.4_10000_0.5_100_1_2_seed.txt":
-        alpha = 1.4
+        beta = 1.4
 
     cur_itr = 1
     for point in data_arr:
-        df = df.append({"itr" : cur_itr, "exploitability" : point, "alpha" : alpha}, ignore_index=True)
+        df = df.append({"itr" : cur_itr, "exploitability" : point, "beta" : beta}, ignore_index=True)
         cur_itr += 1
-
     q.put(df)
     return df
 
 def listener(q,):
     '''listens for messages on the q, writes to file. '''
-    df = pd.DataFrame(columns=["itr", "exploitability", "alpha"])
+    df = pd.DataFrame(columns=["itr", "exploitability", "beta"])
     while 1:
         m = q.get()
+        print("in listener")
+        print(m)
         if m == 'kill':
-            sns.lineplot(x="itr", y="exploitability", hue="alpha", data=df)
+            print("killing listener")
+            print(m)
+            sns.lineplot(x="itr", y="exploitability", hue="beta", data=df)
             break
         df = pd.concat([df, m], ignore_index=True)
+        print(df)
     
 
 
 def main():
 
-    experiments = 10
+    experiments = 5
     iterations = 100
     data_path = "ICML_Experiments_Final/kuhn_poker_players_experiments/2_players_seed_1-10/"
 
@@ -90,7 +94,7 @@ def main():
     plt.yscale("log")
     plt.tight_layout()
     # plt.margins(0.08,0.08)
-    plt.savefig(os.path.join(data_path,"plot/kuhn_stacked_ci_lin_inc_final.pdf"), format='pdf', dpi=2000)
+    plt.savefig(os.path.join(data_path,"plot/stacked_test.pdf"), format='pdf', dpi=2000)
 
 
 

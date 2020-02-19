@@ -58,10 +58,11 @@ def plot_stacked(data_path, files, experiments, iterations):
 
         # keep top n results (based on the last value in the tensor)
         ind=np.argsort(data[:,-1])
-        data_sorted = []
-        for i in range(3):
-            data_sorted.append(data[ind[i], :])
-        data = np.array(data_sorted)
+        data[5:,:]
+        # data_sorted = []
+        # for i in range(5):
+        #     data_sorted.append(data[ind[i], :])
+        # data = np.array(data_sorted)
         data = np.average(data, axis=0)
         data_list.append(data)
 
@@ -83,11 +84,11 @@ def plot_stacked(data_path, files, experiments, iterations):
     plt.legend(loc="upper right")
     # plt.title("Leduc_Poker Dynamics")
     
-    plt.savefig(os.path.join(data_path, "kuhn_3w_lin_inc.png"))
+    # plt.savefig(os.path.join(data_path, "kuhn_3w_lin_inc.png"))
 
     plt.tight_layout()
     plt.margins(0.08,0.08)
-    plt.savefig(os.path.join(data_path,"kuhn_3w_lin_inc_3best.pdf"), format='pdf', dpi=2000)
+    plt.savefig(os.path.join(data_path,"kuhn_test.pdf"), format='pdf', dpi=2000)
 
 def plot_single_confidence(data_path, file, experiments, iterations):
     # data preprocessing, take average
@@ -145,10 +146,11 @@ def plot_stacked_confidence(data_path, file, experiments, iterations):
 
             # keep top n results (based on the last value in the tensor)
             ind=np.argsort(data[:,-1])
-            data_sorted = []
-            for i in range(5):
-                data_sorted.append(data[ind[i], :])
-            data = np.array(data_sorted)
+            data[5:,:]
+            # data_sorted = []
+            # for i in range(5):
+            #     data_sorted.append(data[ind[i], :])
+            # data = np.array(data_sorted)
 
             for experiment in data:
                 cur_itr = 1
@@ -163,9 +165,9 @@ def plot_stacked_confidence(data_path, file, experiments, iterations):
     colors = ["windows blue", "orange", "faded green", "dusty purple", "salmon pink"]
 
     # new_labels = ['NeuRD', 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.05", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.10", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.15"]
-    # new_labels = ['NeuRD', 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.10", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.20", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.30", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.40"]
+    new_labels = ['NeuRD', 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.10", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.20", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.30", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.40"]
     # new_labels = ['NeuRD', 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.05", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.10", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.15", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.20"]
-
+    new_labels = ['NeuRD', 'GeNeuRD, '+r'$\beta$'+"=1.10", 'GeNeuRD, '+r'$\beta$'+"=1.20", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.10", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.20"]
     g = sns.lineplot(x="itr", y="exploitability", hue="beta", palette=sns.xkcd_palette(colors), data=df)
     # legend = g._legend
     # legend.set_title("")
@@ -178,7 +180,7 @@ def plot_stacked_confidence(data_path, file, experiments, iterations):
     plt.yscale("log")
     plt.tight_layout()
     plt.margins(0.08,0.08)
-    plt.savefig(os.path.join(data_path,"kuhn_ci_3p_2w.pdf"), format='pdf', dpi=2000)
+    plt.savefig(os.path.join(data_path,"kuhn_ci_3p_2w_mixed_last5.pdf"), format='pdf', dpi=2000)
 
 
 def plot_lines (data_path, file, experiments, iterations):
@@ -222,7 +224,7 @@ def plot_lines (data_path, file, experiments, iterations):
     plt.savefig(os.path.join(data_path,"kuhn_lin_inc_13_all_seeds.pdf"), format='pdf', dpi=2000)
 
 if __name__ == '__main__':
-    experiments = 5
+    experiments = 10
     iterations = 20000
 
     # data_path = "ICML_Experiments_Appendix/kuhn_poker_players_experiments/"
@@ -240,10 +242,16 @@ if __name__ == '__main__':
     #          "kuhn_poker_1_1_lin_1.3_10000_0.5_100_1_2_seed.txt",
     #          "kuhn_poker_1_1_lin_1.4_10000_0.5_100_1_2_seed.txt"]
 
-    files = ["kuhn_poker_0_1_lin_1_20000_0.5_100_1_3.txt",
-            "kuhn_poker_1_1_lin_1.05_20000_0.5_100_1_3.txt",
+    # files = ["kuhn_poker_0_1_lin_1_40000_0.5_100_1_3.txt",
+    #         "kuhn_poker_1_1_lin_1.05_20000_0.5_100_1_3.txt",
+    #         "kuhn_poker_1_1_lin_1.1_20000_0.5_100_1_3.txt",
+    #         "kuhn_poker_1_1_lin_1.15_20000_0.5_100_1_3.txt",
+    #         "kuhn_poker_1_1_lin_1.2_20000_0.5_100_1_3.txt"]
+
+    files = ["kuhn_poker_0_1_lin_1_40000_0.5_100_1_3.txt",
+            "kuhn_poker_0_1_lin_1.1_40000_0.5_100_1_3.txt",
+            "kuhn_poker_0_1_lin_1.2_40000_0.5_100_1_3.txt",
             "kuhn_poker_1_1_lin_1.1_20000_0.5_100_1_3.txt",
-            "kuhn_poker_1_1_lin_1.15_20000_0.5_100_1_3.txt",
             "kuhn_poker_1_1_lin_1.2_20000_0.5_100_1_3.txt"]
 
     # plot_single(data_path, "kuhn_poker_tsallis_1.09.txt", experiments, iterations)

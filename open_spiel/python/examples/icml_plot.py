@@ -165,9 +165,11 @@ def plot_stacked_confidence(data_path, file, experiments, iterations):
     colors = ["windows blue", "orange", "faded green", "dusty purple", "salmon pink"]
 
     # new_labels = ['NeuRD', 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.05", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.10", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.15"]
-    new_labels = ['NeuRD', 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.10", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.20", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.30", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.40"]
-    # new_labels = ['NeuRD', 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.05", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.10", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.15", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.20"]
-    new_labels = ['NeuRD', 'GeNeuRD, '+r'$\beta$'+"=1.10", 'GeNeuRD, '+r'$\beta$'+"=1.20", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.10", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.20"]
+    # new_labels = ['NeuRD', 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.10", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.20", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.30", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.40"]
+    new_labels = ['NeuRD', 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.05", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.10", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.15", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.20"]
+    # new_labels = ['NeuRD', 'GeNeuRD, '+r'$\beta$'+"=1.10", 'GeNeuRD, '+r'$\beta$'+"=1.20", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.10", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.20"]
+    # new_labels = ['NeuRD', 'GeNeuRD, '+r'$\beta$'+"=1.20", 'GeNeuRD, '+r'$\beta$'+"=1.40", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.20", 'AdaGeNeuRD, '+r'$\beta_T$'+"=1.40"]
+    
     g = sns.lineplot(x="itr", y="exploitability", hue="beta", palette=sns.xkcd_palette(colors), data=df)
     # legend = g._legend
     # legend.set_title("")
@@ -180,7 +182,7 @@ def plot_stacked_confidence(data_path, file, experiments, iterations):
     plt.yscale("log")
     plt.tight_layout()
     plt.margins(0.08,0.08)
-    plt.savefig(os.path.join(data_path,"kuhn_ci_3p_2w_mixed_last5.pdf"), format='pdf', dpi=2000)
+    plt.savefig(os.path.join(data_path,"kuhn_ci_3p_2w_last5_second.pdf"), format='pdf', dpi=2000)
 
 
 def plot_lines (data_path, file, experiments, iterations):
@@ -242,17 +244,24 @@ if __name__ == '__main__':
     #          "kuhn_poker_1_1_lin_1.3_10000_0.5_100_1_2_seed.txt",
     #          "kuhn_poker_1_1_lin_1.4_10000_0.5_100_1_2_seed.txt"]
 
+    files = ["kuhn_poker_0_1_lin_1_40000_0.5_100_1_3.txt",
+            "kuhn_poker_1_1_lin_1.05_20000_0.5_100_1_3.txt",
+            "kuhn_poker_1_1_lin_1.1_20000_0.5_100_1_3.txt",
+            "kuhn_poker_1_1_lin_1.15_20000_0.5_100_1_3.txt",
+            "kuhn_poker_1_1_lin_1.2_20000_0.5_100_1_3.txt"]
+
     # files = ["kuhn_poker_0_1_lin_1_40000_0.5_100_1_3.txt",
-    #         "kuhn_poker_1_1_lin_1.05_20000_0.5_100_1_3.txt",
+    #         "kuhn_poker_0_1_lin_1.1_40000_0.5_100_1_3.txt",
+    #         "kuhn_poker_0_1_lin_1.2_40000_0.5_100_1_3.txt",
     #         "kuhn_poker_1_1_lin_1.1_20000_0.5_100_1_3.txt",
-    #         "kuhn_poker_1_1_lin_1.15_20000_0.5_100_1_3.txt",
     #         "kuhn_poker_1_1_lin_1.2_20000_0.5_100_1_3.txt"]
 
-    files = ["kuhn_poker_0_1_lin_1_40000_0.5_100_1_3.txt",
-            "kuhn_poker_0_1_lin_1.1_40000_0.5_100_1_3.txt",
-            "kuhn_poker_0_1_lin_1.2_40000_0.5_100_1_3.txt",
-            "kuhn_poker_1_1_lin_1.1_20000_0.5_100_1_3.txt",
-            "kuhn_poker_1_1_lin_1.2_20000_0.5_100_1_3.txt"]
+    
+    # files = ["kuhn_poker_0_1_lin_1_10000_0.5_100_1_2.txt",
+    #         "kuhn_poker_0_1_lin_1.2_10000_0.5_100_1_2.txt",
+    #         "kuhn_poker_0_1_lin_1.4_10000_0.5_100_1_2.txt",
+    #         "kuhn_poker_1_1_lin_1.2_10000_0.5_100_1_2_seed.txt",
+    #         "kuhn_poker_1_1_lin_1.4_10000_0.5_100_1_2_seed.txt"]
 
     # plot_single(data_path, "kuhn_poker_tsallis_1.09.txt", experiments, iterations)
 

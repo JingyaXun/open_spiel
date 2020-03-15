@@ -4,7 +4,7 @@ cd /home/open_spiel/open_spiel/python/examples
 export PYTHONPATH=$PYTHONPATH:/home/open_spiel
 export PYTHONPATH=$PYTHONPATH:/home/open_spiel/build/python
 source ../../../venv/bin/activate
-mkdir -p /home/open_spiel/open_spiel/python/examples/ICML_Experiments_Appendix/kuhn_poker_players_experiments
+mkdir -p /home/open_spiel/open_spiel/python/examples/ICML_Experiments_Rebattle/leduc_poker_players_experiments
 # mkdir -p /root/Documents/ICML2020/open_spiel/open_spiel/python/examples/ICML_Experiments_Dynamics_2players/leduc_poker_experiments
 
 run_experiment() {
@@ -29,8 +29,8 @@ run_experiment() {
     EXP_EXPLOIT_RATE=$1;shift
     NUM_PLAYER=$1
     NUM_EXPERIMENTS=5
-    ITERATIONS=30000
-    OUT_DIR=ICML_Experiments_Appendix
+    ITERATIONS=200000
+    OUT_DIR=ICML_Experiments_Rebattle
     POLICY=lin
 
     if [ $ADAPTIVE_POLICY -eq 2 ]
@@ -53,7 +53,7 @@ run_experiment() {
     --players=$NUM_PLAYER &
 }
 
-# 580 / 574
+# 580 / 574 / 578
 if [ $(hostname) = "zhihan3-5b96b546d8-gvhk5" ] 
 then
     # fixed alpha
@@ -88,18 +88,20 @@ then
 # 582
 elif [ $(hostname) = "zhihan1-7dd8d7ff9c-txdpr" ]
 then
-    # linear increase
-    run_experiment kuhn_poker 1 1 1 1.1 0.5 100 1 4
+    run_experiment leduc_poker 1 1 1 1.1 0.5 100 1 2
+    run_experiment leduc_poker 1 1 1 1.15 0.5 100 1 2
 
 # for big experiments
 #31578
-elif [ $(hostname) = "tim7-fc8754657-l6nk2" ]
+elif [ $(hostname) = "tim7-65b8d5b449-h4h67" ]
 then
-    run_experiment kuhn_poker 0 1 1 1 0.5 100 1 4
+    run_experiment leduc_poker 0 1 1 1 0.5 100 1 2
+    run_experiment leduc_poker 1 1 1 1.05 0.5 100 1 2
 # 576
 elif [ $(hostname) = "zhihan2-cf974b58f-ftn4q" ]
 then
     # fixed alpha
-    run_experiment kuhn_poker 1 1 1 1.15 0.5 100 1 4
+    #run_experiment leduc_poker 0 1 1 1 0.5 100 1 2
+    run_experiment leduc_poker 1 1 1 1.2 0.5 100 1 2
 fi
 

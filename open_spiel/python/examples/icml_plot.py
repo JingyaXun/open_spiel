@@ -57,8 +57,9 @@ def plot_stacked(data_path, files, experiments, iterations):
                 data[i] = data_float
 
         # keep top n results (based on the last value in the tensor)
-        ind=np.argsort(data[:,-1])
-        data[5:,:]
+        # ind=np.argsort(data[:,-1])
+        # data[5:,:]
+
         # data_sorted = []
         # for i in range(5):
         #     data_sorted.append(data[ind[i], :])
@@ -73,7 +74,7 @@ def plot_stacked(data_path, files, experiments, iterations):
         if alpha == 1.0:
             plt.plot(x_axis, data, label="NeuRD" )
         else:
-            plt.plot(x_axis, data, label="AdaGeNeuRD, "+r'$\beta$'+"="+format(alpha, '.2f') )
+            plt.plot(x_axis, data, label="GeNeuRD, "+r'$\beta$'+"="+format(alpha, '.2f') )
         alpha += 0.05
    
     # plt.plot(x_axis, data)
@@ -88,7 +89,7 @@ def plot_stacked(data_path, files, experiments, iterations):
 
     plt.tight_layout()
     plt.margins(0.08,0.08)
-    plt.savefig(os.path.join(data_path,"kuhn_test.pdf"), format='pdf', dpi=2000)
+    plt.savefig(os.path.join(data_path,"leduc_2player_GeNeuRD.pdf"), format='pdf', dpi=2000)
 
 def plot_single_confidence(data_path, file, experiments, iterations):
     # data preprocessing, take average
@@ -226,12 +227,12 @@ def plot_lines (data_path, file, experiments, iterations):
     plt.savefig(os.path.join(data_path,"kuhn_lin_inc_13_all_seeds.pdf"), format='pdf', dpi=2000)
 
 if __name__ == '__main__':
-    experiments = 10
-    iterations = 20000
+    experiments = 5
+    iterations = 50000
 
     # data_path = "ICML_Experiments_Appendix/kuhn_poker_players_experiments/"
     # data_path = "ICML_Experiments_Final/kuhn_poker_players_experiments/2_players_seed_1-10/"
-    data_path = "ICML_Experiments_Final/kuhn_poker_players_experiments/"
+    data_path = "ICML_Experiments_Rebattle/leduc_poker_players_experiments/"
 
     # files = ["kuhn_poker_0_1_lin_1_30000_0.5_100_1_4.txt",
     #          "kuhn_poker_1_1_lin_1.05_30000_0.5_100_1_4.txt",
@@ -244,12 +245,6 @@ if __name__ == '__main__':
     #          "kuhn_poker_1_1_lin_1.3_10000_0.5_100_1_2_seed.txt",
     #          "kuhn_poker_1_1_lin_1.4_10000_0.5_100_1_2_seed.txt"]
 
-    files = ["kuhn_poker_0_1_lin_1_40000_0.5_100_1_3.txt",
-            "kuhn_poker_1_1_lin_1.05_20000_0.5_100_1_3.txt",
-            "kuhn_poker_1_1_lin_1.1_20000_0.5_100_1_3.txt",
-            "kuhn_poker_1_1_lin_1.15_20000_0.5_100_1_3.txt",
-            "kuhn_poker_1_1_lin_1.2_20000_0.5_100_1_3.txt"]
-
     # files = ["kuhn_poker_0_1_lin_1_40000_0.5_100_1_3.txt",
     #         "kuhn_poker_0_1_lin_1.1_40000_0.5_100_1_3.txt",
     #         "kuhn_poker_0_1_lin_1.2_40000_0.5_100_1_3.txt",
@@ -257,19 +252,19 @@ if __name__ == '__main__':
     #         "kuhn_poker_1_1_lin_1.2_20000_0.5_100_1_3.txt"]
 
     
-    # files = ["kuhn_poker_0_1_lin_1_10000_0.5_100_1_2.txt",
-    #         "kuhn_poker_0_1_lin_1.2_10000_0.5_100_1_2.txt",
-    #         "kuhn_poker_0_1_lin_1.4_10000_0.5_100_1_2.txt",
-    #         "kuhn_poker_1_1_lin_1.2_10000_0.5_100_1_2_seed.txt",
-    #         "kuhn_poker_1_1_lin_1.4_10000_0.5_100_1_2_seed.txt"]
+    files = ["leduc_poker_0_1_lin_1_50000_0.5_100_1_2.txt",
+            "leduc_poker_0_1_lin_1.05_50000_0.5_100_1_2.txt",
+            "leduc_poker_0_1_lin_1.1_50000_0.5_100_1_2.txt",
+            "leduc_poker_0_1_lin_1.15_50000_0.5_100_1_2.txt",
+            "leduc_poker_0_1_lin_1.2_50000_0.5_100_1_2.txt"]
 
     # plot_single(data_path, "kuhn_poker_tsallis_1.09.txt", experiments, iterations)
 
-    # plot_stacked(data_path, files, experiments, iterations)
+    plot_stacked(data_path, files, experiments, iterations)
     
     # plot_lines(data_path, file, experiments, iterations)
 
-    plot_stacked_confidence(data_path, files, experiments, iterations)
+    # plot_stacked_confidence(data_path, files, experiments, iterations)
     
 
     
